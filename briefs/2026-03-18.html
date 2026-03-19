@@ -1230,12 +1230,13 @@ function toggleAttn(hdr) {
 const TODAY_DATE_STR = '2026-03-18';
 
 function navDate(dir) {
-  const d = new Date(TODAY_DATE_STR + 'T12:00:00');
+  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  if (!m) return;
+  const d = new Date(m[1] + 'T12:00:00');
   d.setDate(d.getDate() + dir);
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2,'0');
-  const dd = String(d.getDate()).padStart(2,'0');
-  window.location.href = `morning-brief-${yyyy}-${mm}-${dd}.html`;
+  const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+  window.location.href = window.location.pathname.replace(/\d{4}-\d{2}-\d{2}/, s);
+}-${mm}-${dd}.html`;
 }
 
 (function() {

@@ -833,12 +833,12 @@ function setLookback(days, btn) {
 
 // ===== DATE NAVIGATION =====
 function navDate(dir) {
-  const briefDate = new Date('2026-03-16T12:00:00');
-  briefDate.setDate(briefDate.getDate() + dir);
-  const y = briefDate.getFullYear();
-  const m = String(briefDate.getMonth() + 1).padStart(2, '0');
-  const d = String(briefDate.getDate()).padStart(2, '0');
-  window.location.href = 'morning-brief-' + y + '-' + m + '-' + d + '.html';
+  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  if (!m) return;
+  const d = new Date(m[1] + 'T12:00:00');
+  d.setDate(d.getDate() + dir);
+  const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+  window.location.href = window.location.pathname.replace(/\d{4}-\d{2}-\d{2}/, s);
 }
 
 // ===== FOCUS TOPICS (localStorage) =====

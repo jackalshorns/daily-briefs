@@ -270,9 +270,9 @@
     <div class="header-date">
       <div style="font-weight:600;">Wednesday, March 4, 2026</div>
       <div class="date-nav-wrap">
-        <button class="date-nav-btn" disabled title="Previous day">◀</button>
+        <button class="date-nav-btn" onclick="navDate(-1)" title="Previous day">◀</button>
         <span style="font-size:12px;opacity:0.6;">Today</span>
-        <button class="date-nav-btn" disabled title="Next day">▶</button>
+        <button class="date-nav-btn" id="date-nav-next" onclick="navDate(1)" title="Next day">▶</button>
       </div>
     </div>
   </div>
@@ -1621,6 +1621,28 @@ function showToast(msg) {
     setTimeout(() => { t.style.opacity = '0'; }, 4000);
   }
 </script>
+
+
+function navDate(dir) {
+  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  if (!m) return;
+  const d = new Date(m[1] + 'T12:00:00');
+  d.setDate(d.getDate() + dir);
+  const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+  window.location.href = window.location.pathname.replace(/\d{4}-\d{2}-\d{2}/, s);
+}
+
+// Disable next-day button if this brief is today or future
+(function() {
+  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  if (m) {
+    const today = new Date().toISOString().split('T')[0];
+    if (m[1] >= today) {
+      const btn = document.getElementById('date-nav-next');
+      if (btn) btn.disabled = true;
+    }
+  }
+})();
 
 </body>
 </html>

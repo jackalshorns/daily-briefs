@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>No Brief</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0f1a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header (matches morning brief style) ── */
+    .header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      padding: 16px 20px 0;
+      flex-shrink: 0;
+    }
+    .header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    .header-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+    .header-date { font-size: 13px; color: rgba(255,255,255,0.65); text-align: right; line-height: 1.5; }
+
+    .date-nav-wrap { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+    .date-nav-btn {
+      background: rgba(255,255,255,0.12); color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px; padding: 2px 8px; font-size: 13px;
+      cursor: pointer; line-height: 1.8; transition: background 0.15s;
+    }
+    .date-nav-btn:hover { background: rgba(255,255,255,0.22); }
+    .date-nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .tab-bar {
+      display: flex; gap: 2px; overflow-x: auto;
+      scrollbar-width: none; padding-bottom: 0;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-stub {
+      padding: 8px 14px; font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.45); white-space: nowrap;
+      border-radius: 8px 8px 0 0;
+    }
+
+    /* ── Body ── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .stub-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 40px 36px;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+    }
+    .stub-icon { font-size: 48px; margin-bottom: 16px; }
+    .stub-title { font-size: 20px; font-weight: 700; color: #e2e8f0; margin-bottom: 8px; }
+    .stub-date { font-size: 15px; color: #94a3b8; margin-bottom: 24px; }
+    .stub-body { font-size: 13px; color: #64748b; line-height: 1.6; margin-bottom: 28px; }
+
+    .stub-nav {
+      display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;
+    }
+    .stub-nav-btn {
+      background: #334155; color: #e2e8f0;
+      border: 1px solid #475569; border-radius: 8px;
+      padding: 9px 18px; font-size: 14px; cursor: pointer;
+      transition: background 0.15s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .stub-nav-btn:hover { background: #3d4f63; border-color: #6366f1; }
+    .stub-nav-btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+
+    .index-link {
+      font-size: 12px; color: #475569; text-decoration: none;
+      transition: color 0.15s;
+    }
+    .index-link:hover { color: #94a3b8; }
+
+    /* ── Generic 404 (non-brief URL) ── */
+    .generic-404 {
+      flex: 1; display: flex; align-items: center;
+      justify-content: center; padding: 40px 20px;
+    }
+    .g404-inner { text-align: center; }
+    .g404-code { font-size: 72px; font-weight: 800; color: #1e293b; line-height: 1; }
+    .g404-msg { font-size: 18px; color: #64748b; margin-top: 8px; }
+    .g404-link { display: inline-block; margin-top: 24px; font-size: 14px;
+      color: #6366f1; text-decoration: none; }
+    .g404-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+(function () {
+  const path = window.location.pathname;
+
+  // ── Extract date from path like /daily-briefs/briefs/2026-03-15.html ──
+  const dateMatch = path.match(/(\d{4}-\d{2}-\d{2})/);
+
+  if (!dateMatch) {
+    // Generic 404 — not a brief URL
+    document.getElementById('app').innerHTML = `
+      <div class="generic-404">
+        <div class="g404-inner">
+          <div class="g404-code">404</div>
+          <div class="g404-msg">Page not found</div>
+          <a class="g404-link" href="/daily-briefs/">← Back to briefs index</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const dateStr = dateMatch[1];
+  const dt = new Date(dateStr + 'T12:00:00');
+  const today = new Date().toISOString().split('T')[0];
+
+  const weekday = dt.toLocaleDateString('en-US', { weekday: 'long' });
+  const monthDay = dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+  // ── Nav helpers ──
+  function offsetDate(str, dir) {
+    const d = new Date(str + 'T12:00:00');
+    d.setDate(d.getDate() + dir);
+    return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+  }
+  function briefUrl(ds) {
+    return path.replace(/\d{4}-\d{2}-\d{2}/, ds);
+  }
+
+  const prevStr = offsetDate(dateStr, -1);
+  const nextStr = offsetDate(dateStr, 1);
+  const isFuture = dateStr >= today;
+  const nextDisabled = isFuture ? 'disabled' : '';
+
+  const bodyMsg = isFuture
+    ? "This date is in the future — no brief has been generated yet."
+    : "No brief was generated for this day. It may have been a weekend, holiday, or the scheduler wasn't running.";
+
+  document.title = `No Brief — ${weekday}, ${monthDay}`;
+
+  document.getElementById('app').innerHTML = `
+    <div class="header">
+      <div class="header-top">
+        <div>
+          <div class="header-title">☀️ Morning Brief</div>
+          <div class="header-sub">UX is Fine · Jason Schklar</div>
+        </div>
+        <div>
+          <div class="date-nav-wrap">
+            <button class="date-nav-btn" onclick="window.location.href='${briefUrl(prevStr)}'" title="Previous day">◀</button>
+            <div class="header-date">${weekday}<br>${dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
+            <button class="date-nav-btn" id="next-btn" ${nextDisabled} onclick="window.location.href='${briefUrl(nextStr)}'" title="Next day">▶</button>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <span class="tab-stub">☀️ Today</span>
+        <span class="tab-stub">📼 Yesterday</span>
+        <span class="tab-stub">📅 Meetings</span>
+        <span class="tab-stub">📬 Updates</span>
+        <span class="tab-stub">✅ Tasks</span>
+        <span class="tab-stub">🛠 CoWork</span>
+        <span class="tab-stub">📋 Appendix</span>
+      </div>
+    </div>
+
+    <div class="page-body">
+      <div class="stub-card">
+        <div class="stub-icon">📭</div>
+        <div class="stub-title">No brief for this day</div>
+        <div class="stub-date">${weekday}, ${monthDay}</div>
+        <div class="stub-body">${bodyMsg}</div>
+        <div class="stub-nav">
+          <button class="stub-nav-btn" onclick="window.location.href='${briefUrl(prevStr)}'">◀ Previous</button>
+          <button class="stub-nav-btn" id="next-stub-btn" ${nextDisabled} onclick="window.location.href='${briefUrl(nextStr)}'">Next ▶</button>
+        </div>
+        <a class="index-link" href="/daily-briefs/">← All briefs</a>
+      </div>
+    </div>`;
+})();
+</script>
+
+</body>
+</html>

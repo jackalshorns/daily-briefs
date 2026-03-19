@@ -262,6 +262,12 @@
       color: #bbb;
       padding: 18px 0 4px;
     }
+  
+  .date-nav-wrap { display:flex; align-items:center; gap:6px; justify-content:flex-end; }
+  .date-nav-btn { background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.2);
+    border-radius:6px; padding:2px 8px; font-size:13px; cursor:pointer; line-height:1.8; }
+  .date-nav-btn:hover { background:rgba(255,255,255,0.22); }
+  .date-nav-btn:disabled { opacity:0.3; cursor:default; }
   </style>
 </head>
 <body>
@@ -274,7 +280,7 @@
         <div class="header-title">☀️ Morning Brief</div>
         <div class="header-sub">UX is Fine · Jason Schklar</div>
       </div>
-      <div class="header-date">Friday<br>February 27, 2026</div>
+      <div class="date-nav-wrap"><button class="date-nav-btn" onclick="navDate(-1)" title="Previous day">◀</button><div class="header-date">Friday<br>February 27, 2026</div><button class="date-nav-btn" id="date-nav-next" onclick="navDate(1)" title="Next day">▶</button></div>
     </div>
     <div class="tab-bar">
       <div class="tab-btn active" onclick="showTab(1)">☀️ Today</div>
@@ -792,6 +798,26 @@
     document.getElementById('panel-' + n).classList.add('active');
     document.querySelectorAll('.tab-btn')[n - 1].classList.add('active');
   }
+</script>
+<script>
+function navDate(dir) {
+  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  if (!m) return;
+  const d = new Date(m[1] + 'T12:00:00');
+  d.setDate(d.getDate() + dir);
+  const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
+  window.location.href = window.location.pathname.replace(/\d{4}-\d{2}-\d{2}/, s);
+}
+(function() {
+  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  if (m) {
+    const today = new Date().toISOString().split('T')[0];
+    if (m[1] >= today) {
+      const btn = document.getElementById('date-nav-next');
+      if (btn) btn.disabled = true;
+    }
+  }
+})();
 </script>
 </body>
 </html>
