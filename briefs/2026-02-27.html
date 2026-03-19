@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Brief — Friday, February 27, 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f4f4f5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      color: #1a1a2e;
+    }
+    .page-wrap { max-width: 760px; margin: 0 auto; padding: 16px 16px 40px; }
+
+    /* ── Header ── */
+    .header {
+      background: #1a1a2e;
+      border-radius: 10px 10px 0 0;
+      padding: 20px 24px 0;
+      color: #fff;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .header-title { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    .header-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+    .header-date { font-size: 13px; color: rgba(255,255,255,0.65); text-align: right; margin-top: 3px; line-height: 1.5; }
+
+    .tab-bar { display: flex; gap: 0; margin-top: 4px; }
+    .tab-btn {
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .tab-btn:hover { color: rgba(255,255,255,0.85); }
+    .tab-btn.active { color: #fff; border-bottom-color: #5b6af0; }
+
+    /* ── Panels ── */
+    .panel { display: none; padding: 16px 0; }
+    .panel.active { display: block; }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      vertical-align: middle;
+    }
+    .badge-red    { background: #fde8e8; color: #c0392b; }
+    .badge-amber  { background: #fff4e5; color: #c07400; }
+    .badge-green  { background: #e8f5e9; color: #2e7d32; }
+    .badge-indigo { background: #eef0ff; color: #5b6af0; }
+    .badge-purple { background: #f5eeff; color: #7b2ee8; }
+    .badge-gray   { background: #f0f0f2; color: #555; }
+
+    /* ── Summary block ── */
+    .summary {
+      background: #fff;
+      border: 1px solid #e8e8ec;
+      border-left: 4px solid #5b6af0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: #333;
+    }
+
+    /* ── Action cards ── */
+    .action-card {
+      background: #fff;
+      border: 1px solid #e8e8ec;
+      border-radius: 8px;
+      padding: 13px 16px;
+      margin-bottom: 8px;
+    }
+    .action-card.card-warning { border-left: 4px solid #c07400; }
+    .action-card.card-info    { border-left: 4px solid #5b6af0; }
+    .action-card.card-urgent  { border-left: 4px solid #c0392b; }
+    .action-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .action-title { font-weight: 600; font-size: 14px; }
+    .action-detail { color: #555; font-size: 13px; line-height: 1.5; }
+
+    /* ── Section headers ── */
+    .section-hdr {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #999;
+      margin: 18px 0 8px;
+    }
+
+    /* ── Meeting cards (Yesterday tab) ── */
+    .mtg-card {
+      background: #fff;
+      border: 1px solid #e8e8ec;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .mtg-card.hot-lead { border-left: 4px solid #c0392b; }
+    .mtg-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .mtg-card-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .mtg-card-meta  { font-size: 12px; color: #888; }
+    .mtg-card-body  { padding: 2px 16px 14px; }
+
+    /* ── Person rows ── */
+    .persons-block { margin: 8px 0 10px; }
+    .person-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px 0;
+      border-bottom: 1px solid #f4f4f5;
+    }
+    .person-row:last-child { border-bottom: none; }
+    .person-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+    .person-role { font-size: 12px; color: #777; }
+
+    /* ── Pills ── */
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 9px;
+      border-radius: 12px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .pill-crm       { background: #eef0ff; color: #5b6af0; }
+    .pill-li        { background: #e8f0fe; color: #1a73e8; }
+    .pill-li-search { background: #f5eeff; color: #7b2ee8; }
+    .pill-krisp     { background: #e8f5e9; color: #2e7d32; }
+    .pill-group { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+    /* ── Key points & action items ── */
+    .list-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #bbb;
+      margin-top: 10px;
+      margin-bottom: 2px;
+    }
+    .kp-list, .ai-list { margin: 4px 0 6px; padding: 0; list-style: none; }
+    .kp-list li {
+      font-size: 13px;
+      color: #333;
+      padding: 3px 0 3px 14px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .kp-list li::before { content: "·"; position: absolute; left: 0; color: #999; }
+    .ai-list li {
+      font-size: 13px;
+      color: #c07400;
+      padding: 3px 0 3px 18px;
+      position: relative;
+      line-height: 1.55;
+    }
+    .ai-list li::before { content: "→"; position: absolute; left: 0; color: #c07400; }
+
+    /* ── Meetings tab ── */
+    .cal-row {
+      background: #fff;
+      border: 1px solid #e8e8ec;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      overflow: hidden;
+    }
+    .cal-time {
+      width: 76px;
+      min-width: 76px;
+      background: #f8f8fa;
+      padding: 14px 10px;
+      text-align: center;
+      border-right: 1px solid #e8e8ec;
+    }
+    .cal-time-main { font-size: 15px; font-weight: 700; color: #1a1a2e; }
+    .cal-time-dur  { font-size: 11px; color: #999; margin-top: 3px; }
+    .cal-body { padding: 14px 16px; flex: 1; }
+    .cal-name { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .cal-org  { font-size: 12px; color: #777; margin-bottom: 8px; }
+    .cal-blurb {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #f0f0f3;
+      font-size: 13px;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    /* ── Updates tab ── */
+    .update-card {
+      background: #fff;
+      border: 1px solid #e8e8ec;
+      border-radius: 8px;
+      padding: 11px 14px;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .update-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .update-body { flex: 1; }
+    .update-title  { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+    .update-detail { font-size: 12px; color: #666; line-height: 1.5; }
+
+    /* ── Tasks tab ── */
+    .task-block { margin-bottom: 18px; }
+    .task-block-hdr {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    .task-row {
+      background: #fff;
+      border: 1px solid #e8e8ec;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .task-chip { flex-shrink: 0; margin-top: 1px; }
+    .task-text { font-size: 13px; line-height: 1.5; }
+    .task-title { font-weight: 600; }
+    .task-desc  { color: #666; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+      padding: 18px 0 4px;
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-title">☀️ Morning Brief</div>
+        <div class="header-sub">UX is Fine · Jason Schklar</div>
+      </div>
+      <div class="header-date">Friday<br>February 27, 2026</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-btn active" onclick="showTab(1)">☀️ Today</div>
+      <div class="tab-btn" onclick="showTab(2)">📼 Yesterday</div>
+      <div class="tab-btn" onclick="showTab(3)">📅 Meetings</div>
+      <div class="tab-btn" onclick="showTab(4)">📬 Updates</div>
+      <div class="tab-btn" onclick="showTab(5)">✅ Tasks</div>
+    </div>
+  </div>
+
+  <!-- TAB 1 — TODAY -->
+  <div id="panel-1" class="panel active">
+
+    <div class="summary">
+      The Scopely NDA is fully executed — one less thing to track. Two warm GDC leads arrived overnight: Dead Nice (Paolo Parrucci + COO Jasmine Christmas) and Dead Monkey (Sara Angel), both interested in GDC time. Your day has two real meetings: Ric Neil at 9 AM and Boss Rush at 11:30. Mission 42 staffing is still the open call — Ashley needs your decision on Sarah's split before she can finalize scheduling.
+    </div>
+
+    <div class="section-hdr">🚨 Act Today</div>
+
+    <div class="action-card card-warning">
+      <div class="action-top">
+        <span class="badge badge-amber">TODAY</span>
+        <span class="action-title">Ric Neil — 9:00 AM call starting now</span>
+      </div>
+      <div class="action-detail">60-minute external call. Pull Copper for relationship context and last touchpoint before you dial in.</div>
+    </div>
+
+    <div class="action-card card-warning">
+      <div class="action-top">
+        <span class="badge badge-amber">TODAY</span>
+        <span class="action-title">Mission 42 — Sarah's time: .5 or .25?</span>
+      </div>
+      <div class="action-detail">Ashley is waiting on your decision. See Slack DM thread — reply today so scheduling can be finalized.</div>
+    </div>
+
+    <div class="action-card card-info">
+      <div class="action-top">
+        <span class="badge badge-indigo">New Lead</span>
+        <span class="action-title">Dead Nice — Paolo Parrucci + Jasmine Christmas (COO)</span>
+      </div>
+      <div class="action-detail">GDC intro overnight. They want a meeting slot at GDC. Reply to confirm time before slots fill up.</div>
+    </div>
+
+    <div class="action-card card-info">
+      <div class="action-top">
+        <span class="badge badge-indigo">New Lead</span>
+        <span class="action-title">Dead Monkey — Sara Angel (collab interest)</span>
+      </div>
+      <div class="action-detail">Jason replied + CC'd Ashley. Ashley is investigating the collab angle. Check in with Ashley on status today — may need to get a GDC slot on the calendar.</div>
+    </div>
+
+  </div>
+
+  <!-- TAB 2 — YESTERDAY -->
+  <div id="panel-2" class="panel">
+
+    <!-- 1. Matt / Jason -->
+    <div class="mtg-card">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">Matt / Jason</div>
+          <div class="mtg-card-meta">Feb 26 · Early AM · Internal</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-gray">Internal</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9a60800576a982c1068a1a4b68bd" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>GDC deck review — Jason needs to incorporate coffee content and address open questions before the company meeting.</li>
+          <li>Figma MCP integration with Claude discussed; Matt using it for non-proprietary content to generate vectors. Jason having difficulty with Figma write functionality — only generating SVGs, not editing Figma files directly.</li>
+          <li>Claude Cowork demo — Jason showed calendar, Gmail, Krisp, and CRM integrations with automated meeting briefings. Matt wants the tool integrated into master docs so anyone joining a meeting can get up to speed fast.</li>
+          <li>AI and SaaS disruption discussed — agentic approaches expected to gradually replace profitable SaaS solutions.</li>
+          <li>Follow-up catch-up scheduled for 11:30 AM (Matt's time) to dig into Matt's written thoughts from their last conversation.</li>
+        </ul>
+        <div class="list-label">Action Items</div>
+        <ul class="ai-list">
+          <li>Jason: Review and incorporate deck content, address open questions this morning</li>
+          <li>Jason: Get Matt's help setting up Figma MCP integration with Claude to enable Figma writes</li>
+          <li>Jason: Send Matt a calendar invite for the 11:30 catch-up</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2. SEGA / CA -->
+    <div class="mtg-card hot-lead">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">SEGA / Creative Assembly — Intro Call</div>
+          <div class="mtg-card-meta">Feb 26 · ~8:30 AM · External · Total War partnership</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-red">Hot Lead</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9a78ae6e73a5a157a9da5a610f72" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="persons-block">
+          <div class="person-row">
+            <span class="person-name">Jon Kay</span>
+            <span class="person-role">· Core Dev &amp; Outsourcing Manager · Sega Studios</span>
+            <a class="pill pill-li-search" href="https://www.linkedin.com/search/results/people/?keywords=Jon+Kay+Sega+Studios" target="_blank">LI search</a>
+          </div>
+          <div class="person-row">
+            <span class="person-name">Aron Riordan</span>
+            <span class="person-role">· UX Producer · Creative Assembly (Total War)</span>
+            <a class="pill pill-li-search" href="https://www.linkedin.com/search/results/people/?keywords=Aron+Riordan+Creative+Assembly" target="_blank">LI search</a>
+          </div>
+          <div class="person-row">
+            <span class="person-name">Grant Mullock</span>
+            <span class="person-role">· UI/UX Product Owner · Creative Assembly (Total War)</span>
+            <a class="pill pill-li-search" href="https://www.linkedin.com/search/results/people/?keywords=Grant+Mullock+Creative+Assembly" target="_blank">LI search</a>
+          </div>
+          <div class="person-row">
+            <span class="person-name">Brandon (EVE)</span>
+            <span class="person-role">· Sega Studios</span>
+            <a class="pill pill-li-search" href="https://www.linkedin.com/search/results/people/?keywords=Brandon+Sega+Studios" target="_blank">LI search</a>
+          </div>
+        </div>
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>Sega Studios seeking a CODEV partner to integrate developers into team ceremonies for Total War games — looking for long-term partnerships that scale up and down across multiple titles and timelines.</li>
+          <li>Ideal profile: UX Designers experienced with dense strategy games on mouse/keyboard or gamepad console, preferably Total War or similar IP. UXIF confirmed strategy game creds via Dave's Big Huge Games RTS background and Ara (Xbox) turn-based work.</li>
+          <li>Three-stage pipeline: L1 wireframes/prototypes in Figma → L2 implementation in proprietary UID tool (context system scripting) → L3 visual mockups + assets + motion in Spine Enterprise.</li>
+          <li>UXIF lane structure (~$15k/lane, partial directors for consistency) and full-spectrum services (including C++/C# engineering) aligned well with Sega's backend UI requirements.</li>
+          <li>Grant wants one person to start ASAP to build relationships, with potential to scale quickly across multiple Total War projects.</li>
+        </ul>
+        <div class="list-label">Action Items</div>
+        <ul class="ai-list">
+          <li>Brandon: Send UXIF illustration-focused decks/videos to Grant and Aron at Sega Studios</li>
+          <li>Aron: Send Total War UI pipeline YouTube video link to Jason + Ashley</li>
+          <li>Jon: Put together examples of work at different quality levels (design, art, technical) for UXIF to review</li>
+          <li>Jon: Follow up with each team re: progression and next steps on the potential partnership</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3. Post SEGA Sync -->
+    <div class="mtg-card">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">Post SEGA / CA Debrief</div>
+          <div class="mtg-card-meta">Feb 26 · ~9:45 AM · Internal · Jason + Ashley</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-gray">Internal</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9aa65a09711aa7a0e00580e3dcd6" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>Strong opportunity — Ashley sees SEGA as a good foothold to start small and scale across the broader SEGA organization.</li>
+          <li>Jason/Ashley coordination during the pitch needs improvement — they were stepping on each other. Need a clear pre-call protocol and divided roles.</li>
+          <li>Automated briefing tool found useful; Ashley copied content directly into the SEGA cover sheet. Copper CRM data quality needs improvement before the briefing can be fully trusted.</li>
+          <li>Building a European team will be necessary to serve clients like SEGA long-term — needs trusted contacts for recruiting abroad.</li>
+        </ul>
+        <div class="list-label">Action Items</div>
+        <ul class="ai-list">
+          <li>Jason + Ashley: Establish a coordination protocol for client calls — divide roles, avoid talking over each other</li>
+          <li>Jason + Ashley: Improve Copper CRM data quality to support better AI-generated briefs</li>
+          <li>Jason: Build requested AI tools/features for Ashley as discussed</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4. BizDev Regroup -->
+    <div class="mtg-card">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">Weekly BizDev Regroup</div>
+          <div class="mtg-card-meta">Feb 26 · ~10:00 AM · Internal · Jason + Ashley</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-gray">Internal</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9ab4fd2772219b055e536b629f20" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>7 active projects — pipeline is healthy heading into Q2 with the March cliff already backfilled.</li>
+          <li>GDC deck still needs work — Jason needs to block focus time to prep content before the company meeting.</li>
+          <li>DICE themes across 21 meetings: globalization, early-stage prototyping, AI tooling, and clients wanting UXIF in early were the dominant patterns.</li>
+          <li>Globalization strategy shifting — away from Game Shaster toward identifying global talent and building minimum viable teams grounded in UXIF's existing DNA.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. Director Discussion (Brian Powers) -->
+    <div class="mtg-card">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">Director Project Discussion — Brian Powers Transition</div>
+          <div class="mtg-card-meta">Feb 26 · 1:00 PM · Internal</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-gray">Internal</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9b56fc68729d989a0f82bbb7abb0" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>Brian Powers is leaving to join a client — departing after rebuilding the UX department from zero. Zero complaints, zero internal issues throughout his tenure.</li>
+          <li>Mission 42 onboarding Katrina + Felicity next week — team at 4 going into March, potential April additions.</li>
+          <li>Sarah Benjamin formally promoted to Director of UX — natural progression based on client leadership, quality standards, and hiring initiatives.</li>
+          <li>Jason to travel to Seattle before GDC for international networking; targeting Malta by end of April for European expansion exploration.</li>
+          <li>Wren's streaming channel is a 10x value multiplier — need to protect that capacity and potentially find additional prototyping talent beyond Wren (Harrison and Grant trusted to lead).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 6. Monthly Company Meeting -->
+    <div class="mtg-card">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">Monthly Company Meeting</div>
+          <div class="mtg-card-meta">Feb 26 · 2:00 PM · Internal · Full team</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-gray">Internal</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9b8ca5e6723e8136f25ee03e0ed0" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>7 projects active — 45% more billing vs Q1 last year, with 76% of all of last year's total revenue already contracted and waiting for signatures in the current pipeline.</li>
+          <li>Riot TFT expanded massively — now one of the company's largest teams. Mission 42 evolved from a 3-week trial to a 12-month contract for 4 pods / 8.5 people.</li>
+          <li>GDC: 20+ meetings scheduled, Board Game Night expanded to 40 attendees, co-hosting the AI+Games event (up to 300 people) with Cartesia and an AI agency.</li>
+          <li>Brian Powers officially announced as departing to join a client. Sarah Benjamin promoted to Director of UX — team-wide appreciation shared in the meeting.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 7. GDC Deck Sync -->
+    <div class="mtg-card">
+      <div class="mtg-card-header">
+        <div>
+          <div class="mtg-card-title">GDC Deck Sync</div>
+          <div class="mtg-card-meta">Feb 26 · 2:30 PM · Internal · Matt, Dave, Ashley</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          <span class="badge badge-gray">Internal</span>
+          <a class="pill pill-krisp" href="https://app.krisp.ai/t/019c9ba774f871edbe14a2e243d7caeb" target="_blank">📝 Krisp</a>
+        </div>
+      </div>
+      <div class="mtg-card-body">
+        <div class="list-label">Key Points</div>
+        <ul class="kp-list">
+          <li>Dave praised the authentic DIY aesthetic — especially the "proven code partner" slide with the bear on the shoulder.</li>
+          <li>Visual revisions needed: elastic capacity model → step-ladder step function (new title: "The right people at the right time"); "You covered end to end" slide background figure to bleed off the top; hero images to use recognizable IP (Valorant suggested).</li>
+          <li>Typography: yellow text + white doesn't read as bold — use toned-down gray to make yellow pop. Loop lines from the AI version preferred for the validated iteration section over white bubbles.</li>
+          <li>Global advantage revised: "blended teams" over "blended rates"; three value props — global reach (expanding markets), blended teams (pricing), global ecosystem (cultural relevance).</li>
+          <li>Ashley received a $2,500 bonus for exceptional leadership and initiative. Sophie to create custom illustrations Monday; 4 days allocated for pre-GDC prep.</li>
+        </ul>
+        <div class="list-label">Action Items</div>
+        <ul class="ai-list">
+          <li>Jason: Copy editing on multiple slides — blended rates section, talking points</li>
+          <li>Jason: Rapid prototyping slide — "innovate with confidence" messaging; consumer validation as the key differentiator</li>
+          <li>Jason: Finalize hero images with recognizable IP across first few slides</li>
+          <li>Matt: Explore offline/browser-based iPad presentation solution for 17 slides</li>
+          <li>Sophie (Monday): Create custom illustrations for specified slides; 4 days budgeted</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB 3 — MEETINGS -->
+  <div id="panel-3" class="panel">
+
+    <div class="cal-row">
+      <div class="cal-time">
+        <div class="cal-time-main">9:00</div>
+        <div class="cal-time-dur">60 min</div>
+      </div>
+      <div class="cal-body">
+        <div class="cal-name">Ric Neil <span class="badge badge-indigo">External</span></div>
+        <div class="cal-org">1:1 call · CST</div>
+        <div class="pill-group">
+          <a class="pill pill-crm" href="https://app.copper.com/companies/499808/app#/browse/list/people/default" target="_blank">Copper</a>
+          <a class="pill pill-li-search" href="https://www.linkedin.com/search/results/people/?keywords=Ric+Neil" target="_blank">LI search</a>
+        </div>
+        <div class="cal-blurb">
+          No Copper context was loaded for Ric Neil in time for this brief — pull CRM before dialing in to see relationship history, who owns this relationship, and what was last discussed. If there's a prior Krisp transcript, it's worth a quick scan. This call starts imminently.
+        </div>
+      </div>
+    </div>
+
+    <div class="cal-row">
+      <div class="cal-time">
+        <div class="cal-time-main">11:30</div>
+        <div class="cal-time-dur">50 min</div>
+      </div>
+      <div class="cal-body">
+        <div class="cal-name">Boss Rush <span class="badge badge-gray">Internal</span></div>
+        <div class="cal-org">Recurring internal sync · CST</div>
+        <div class="cal-blurb">
+          Recurring internal meeting — no external prep needed. Based on yesterday, likely agenda items: SEGA next steps, GDC deck remaining revisions, Mission 42 Sarah staffing, and the two new GDC lead requests (Dead Nice + Dead Monkey). Come in current on the BizDev and company meeting outputs.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB 4 — UPDATES -->
+  <div id="panel-4" class="panel">
+
+    <div class="section-hdr">📬 Email</div>
+
+    <div class="update-card" style="border-left:4px solid #4caf50;">
+      <div class="update-icon">✅</div>
+      <div class="update-body">
+        <div class="update-title">Scopely — NDA fully executed</div>
+        <div class="update-detail">Done. No action needed. One less thing heading into GDC.</div>
+      </div>
+    </div>
+
+    <div class="update-card" style="border-left:4px solid #5b6af0;">
+      <div class="update-icon">🎮</div>
+      <div class="update-body">
+        <div class="update-title">Dead Nice — Paolo Parrucci + Jasmine Christmas (COO) &nbsp;<span class="badge badge-indigo">New Lead</span></div>
+        <div class="update-detail">GDC intro overnight. They want a meeting slot at GDC — reply to confirm time before slots fill up.</div>
+      </div>
+    </div>
+
+    <div class="update-card" style="border-left:4px solid #5b6af0;">
+      <div class="update-icon">🐒</div>
+      <div class="update-body">
+        <div class="update-title">Dead Monkey — Sara Angel &nbsp;<span class="badge badge-indigo">New Lead</span></div>
+        <div class="update-detail">Collab interest. Jason replied + CC'd Ashley. Ashley is investigating. Check in with Ashley today — may need a GDC slot added.</div>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="update-icon">⚡</div>
+      <div class="update-body">
+        <div class="update-title">Riot — Monday kickoff confirmed</div>
+        <div class="update-detail">TFT kickoff is set. No action needed today.</div>
+      </div>
+    </div>
+
+    <div class="update-card" style="border-left:4px solid #c07400;">
+      <div class="update-icon">❓</div>
+      <div class="update-body">
+        <div class="update-title">Mission 42 — Sarah staffing: .5 or .25? &nbsp;<span class="badge badge-amber">Decision</span></div>
+        <div class="update-detail">Open Slack thread with Ashley. Your call — respond today so scheduling can be finalized.</div>
+      </div>
+    </div>
+
+    <div class="section-hdr">📄 Drive — Modified Yesterday</div>
+
+    <div class="update-card">
+      <div class="update-icon">📋</div>
+      <div class="update-body">
+        <div class="update-title">MIS193 Master Doc — Ashley</div>
+        <div class="update-detail">Mission 42 project doc. Review if you need context on the Sarah staffing question or for Monday's Riot kickoff.</div>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="update-icon">📊</div>
+      <div class="update-body">
+        <div class="update-title">GDC Deck Sync Notes</div>
+        <div class="update-detail">Notes from yesterday's deck sync. Reference for remaining slide revisions before GDC.</div>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="update-icon">⚡</div>
+      <div class="update-body">
+        <div class="update-title">Riot League doc</div>
+        <div class="update-detail">Recently updated. Good to review before Monday's kickoff.</div>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="update-icon">🥧</div>
+      <div class="update-body">
+        <div class="update-title">Pie Trap notes</div>
+        <div class="update-detail">Edited recently. No immediate action flagged.</div>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="update-icon">🌍</div>
+      <div class="update-body">
+        <div class="update-title">Globalization doc — Jason editing</div>
+        <div class="update-detail">Strategy shift from Game Shaster → global talent sourcing and minimum viable teams. No action needed today.</div>
+      </div>
+    </div>
+
+    <div class="section-hdr">💬 Slack</div>
+
+    <div class="update-card" style="border-left:4px solid #c07400;">
+      <div class="update-icon">💬</div>
+      <div class="update-body">
+        <div class="update-title">DM: Ashley — Mission 42 / Sarah time split &nbsp;<span class="badge badge-amber">Waiting on Jason</span></div>
+        <div class="update-detail">Ashley needs your call: Sarah at .5 or .25 for Mission 42. Thread is active — respond today.</div>
+      </div>
+    </div>
+
+    <div class="update-card">
+      <div class="update-icon">💬</div>
+      <div class="update-body">
+        <div class="update-title">DM: Ashley — Dead Monkey collab</div>
+        <div class="update-detail">Ashley is looking into the Dead Monkey collab angle after Jason's reply to Sara Angel. No action needed from Jason yet.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB 5 — TASKS -->
+  <div id="panel-5" class="panel">
+
+    <div class="task-block">
+      <div class="task-block-hdr">🤖 Claude Improvements</div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-indigo">claude</span></div>
+        <div class="task-text">
+          <span class="task-title">Edit text &amp; save back to Copper/Doc</span>
+          <span class="task-desc"> — ability to edit AI-generated summaries and push changes back to Copper CRM notes or Google Docs</span>
+        </div>
+      </div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-indigo">claude</span></div>
+        <div class="task-text">
+          <span class="task-title">Participant error-checking</span>
+          <span class="task-desc"> — Krisp sometimes mis-transcribes names; system should reconcile attendees against Calendar + Email + Copper, and flag uncertain matches for follow-up</span>
+        </div>
+      </div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-indigo">claude</span></div>
+        <div class="task-text">
+          <span class="task-title">Quick Krisp jump link</span>
+          <span class="task-desc"> — from any meeting card, one-click to open that Krisp conversation to edit/update/query the transcript</span>
+        </div>
+      </div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-indigo">claude</span></div>
+        <div class="task-text">
+          <span class="task-title">Quick Reference tab (tab 6)</span>
+          <span class="task-desc"> — add 6th tab to the morning brief with a glossary of key skill names and existing scheduled tasks</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-block-hdr">💼 Work</div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-green">work</span></div>
+        <div class="task-text">
+          <span class="task-title">Assess client engagement preferences</span>
+          <span class="task-desc"> — engage clients to understand preferred short-term vs. long-term engagement types</span>
+        </div>
+      </div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-green">work</span></div>
+        <div class="task-text">
+          <span class="task-title">Review proposal submission process</span>
+          <span class="task-desc"> — analyze current methods across project phases to optimize cost and value delivery</span>
+        </div>
+      </div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-green">work</span></div>
+        <div class="task-text">
+          <span class="task-title">Explore AI and globalization opportunities</span>
+          <span class="task-desc"> — gauge client openness to AI-empowered tools and global talent/globalization</span>
+        </div>
+      </div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-green">work</span></div>
+        <div class="task-text">
+          <span class="task-title">Develop RFP inclusion strategy</span>
+          <span class="task-desc"> — create approaches to get into bids where UXIF is currently not considered or visible</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-block-hdr">🧍 Personal</div>
+
+      <div class="task-row">
+        <div class="task-chip"><span class="badge badge-amber">personal</span></div>
+        <div class="task-text">
+          <span class="task-title">Personal errands</span>
+          <span class="task-desc"> — Tenor sticks, headphones, Venmo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Synced from TASKS.md · Last updated February 27, 2026</div>
+
+  </div>
+
+  <div class="footer">Generated by Claude · UX is Fine Morning Brief · Friday, February 27, 2026</div>
+
+</div>
+<script>
+  function showTab(n) {
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('panel-' + n).classList.add('active');
+    document.querySelectorAll('.tab-btn')[n - 1].classList.add('active');
+  }
+</script>
+</body>
+</html>
