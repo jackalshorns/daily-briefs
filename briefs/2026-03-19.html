@@ -123,6 +123,19 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
 .gen-time { font-size:10px; color:rgba(255,255,255,0.3); text-align:right; margin-top:4px; }
 .appendix-section { margin-bottom:20px; }
 .appendix-section h4 { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#999; margin-bottom:8px; }
+
+/* Krisp publish edit panel */
+.mtg-edit-area {
+  width: 100%; box-sizing: border-box; min-height: 90px;
+  padding: 10px; font-family: inherit; font-size: 12px;
+  line-height: 1.5; color: #1a1a2e;
+  border: 1px solid #e0e0e8; border-radius: 6px;
+  resize: vertical; outline: none; background: #fafafa;
+  transition: border-color 0.15s;
+}
+.mtg-edit-area:focus { border-color: #6366f1; }
+.mtg-pub-btn { background: #fff4e5; color: #c07400; border-color: #f5c842; }
+.mtg-pub-btn:hover { background: #ffecc0; }
 </style>
 </head>
 <body>
@@ -339,7 +352,37 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
       </ul>
       <div class="mtg-cta-bar">
         <a class="cta-btn" href="https://app.krisp.ai/t/019d013f925170ca86a6044659761e8c" target="_blank">🎙 Krisp</a>
-      </div>
+      
+<!-- Krisp publish controls -->
+<div class="mtg-publish-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; padding-top:6px; border-top:1px dashed #f0f0f3;">
+  <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d013f925170ca86a6044659761e8c', 'Accelerator Squad Meetup', '2026-03-18', 'Jason Schklar', this)" title="Copy note for Copper CRM">🔶 Publish to Copper</button>
+  <button class="cta-btn" onclick="toggleMtgEdit('019d013f925170ca86a6044659761e8c', this)" title="Edit summary before publishing">✏️ Edit Summary</button>
+</div>
+<div class="mtg-edit-panel" id="mtg-edit-019d013f925170ca86a6044659761e8c" style="display:none; margin-top:8px;">
+  <div style="font-size:11px; color:#888; margin-bottom:5px;">Go to Krisp, assign speakers &amp; get your improved summary, then paste it below:</div>
+  <textarea class="mtg-edit-area" id="mtg-text-019d013f925170ca86a6044659761e8c" placeholder="Paste improved summary from Krisp here...">Key Points:
+* Choreo originated from a pivot after 2020 layoffs — Alan shifted from mechanical engineering to app development, inspired by a plant-watering app and a gap spotted in the home chore-tracking category on the App Store.
+* ADHD was identified as a target keyword through Etsy trend research, leading Alan to position Choreo as a gamified chore-tracking app for people with ADHD, built in Flutter for cross-platform iOS and Android.
+* Gamification — streaks, XP, and characters via RIVE — was added after early users found the app too generic; positive user sentiment persists even when bugs are reported.
+* Choreo&#x27;s audience has broadened beyond ADHD users to include families and multi-user households, a niche Alan sees as underserved since most competing apps target individuals.
+* Prioritization is Alan&#x27;s biggest challenge — a long, community-driven feature backlog with no clear ranking system makes it hard to decide what to build next.
+* No community-wide communication exists yet; all user feedback has been handled individually via email, and an opt-in email list has been collected but no campaigns have been sent.
+* Jason recommended sharing a public roadmap with users and creating a channel for community-wide prioritization input, noting that transparency can improve retention and trust even when not every request is fulfilled.
+* Alan joined the accelerator primarily seeking mentorship and growth best practices, as a solo first-time developer who has been &quot;winging it&quot; without prior app experience.
+
+Action Items:
+* huming to set up Gemini to automatically transcribe and take notes for future meetings.**
+* Speaker_3 to start sending email campaigns to opted-in users, including roadmap updates.**
+* Jason to give a talk on UX and onboarding next week.** - _Jason Schklar_
+* Speaker_3 to do more research into ADHD to better understand their user base.**
+* huming to schedule the weekly recurring meeting for an hour before the Scarvo meeting on Mondays.**
+* Jason to review and refine OKRs with Speaker_3 at the next meeting.** - _Jason Schklar_
+* Jason to connect Speaker_3 with appropriate bench mentors based on their needs.** - _Jason Schklar_</textarea>
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d013f925170ca86a6044659761e8c', 'Accelerator Squad Meetup', '2026-03-18', 'Jason Schklar', this)">🔶 Publish to Copper</button>
+    <span class="mtg-copy-toast" id="mtg-toast-019d013f925170ca86a6044659761e8c" style="display:none; font-size:11px; color:#22c55e;">✓ Copied! Paste in Cowork and say "publish to Copper"</span>
+  </div>
+</div>
     </div>
   </div>
 
@@ -362,7 +405,20 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
       </ul>
       <div class="mtg-cta-bar">
         <a class="cta-btn" href="https://app.krisp.ai/t/019d0192743174af8d9f0e8226478511" target="_blank">🎙 Krisp</a>
-      </div>
+      
+<!-- Krisp publish controls -->
+<div class="mtg-publish-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; padding-top:6px; border-top:1px dashed #f0f0f3;">
+  <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d0192743174af8d9f0e8226478511', 'Dave / Jason Weekly', '2026-03-18', 'Jason Schklar, Dave Inscore', this)" title="Copy note for Copper CRM">🔶 Publish to Copper</button>
+  <button class="cta-btn" onclick="toggleMtgEdit('019d0192743174af8d9f0e8226478511', this)" title="Edit summary before publishing">✏️ Edit Summary</button>
+</div>
+<div class="mtg-edit-panel" id="mtg-edit-019d0192743174af8d9f0e8226478511" style="display:none; margin-top:8px;">
+  <div style="font-size:11px; color:#888; margin-bottom:5px;">Go to Krisp, assign speakers &amp; get your improved summary, then paste it below:</div>
+  <textarea class="mtg-edit-area" id="mtg-text-019d0192743174af8d9f0e8226478511" placeholder="Paste improved summary from Krisp here...">No summary available.</textarea>
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d0192743174af8d9f0e8226478511', 'Dave / Jason Weekly', '2026-03-18', 'Jason Schklar, Dave Inscore', this)">🔶 Publish to Copper</button>
+    <span class="mtg-copy-toast" id="mtg-toast-019d0192743174af8d9f0e8226478511" style="display:none; font-size:11px; color:#22c55e;">✓ Copied! Paste in Cowork and say "publish to Copper"</span>
+  </div>
+</div>
     </div>
   </div>
 
@@ -390,7 +446,28 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
       </ul>
       <div class="mtg-cta-bar">
         <a class="cta-btn" href="https://app.krisp.ai/t/019d020b69cc76fcb98131280ee05a99" target="_blank">🎙 Krisp</a>
-      </div>
+      
+<!-- Krisp publish controls -->
+<div class="mtg-publish-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; padding-top:6px; border-top:1px dashed #f0f0f3;">
+  <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d020b69cc76fcb98131280ee05a99', 'Sarah / Jason — Recruiting & Talent', '2026-03-18', 'Sarah Benjamin, Jason Schklar', this)" title="Copy note for Copper CRM">🔶 Publish to Copper</button>
+  <button class="cta-btn" onclick="toggleMtgEdit('019d020b69cc76fcb98131280ee05a99', this)" title="Edit summary before publishing">✏️ Edit Summary</button>
+</div>
+<div class="mtg-edit-panel" id="mtg-edit-019d020b69cc76fcb98131280ee05a99" style="display:none; margin-top:8px;">
+  <div style="font-size:11px; color:#888; margin-bottom:5px;">Go to Krisp, assign speakers &amp; get your improved summary, then paste it below:</div>
+  <textarea class="mtg-edit-area" id="mtg-text-019d020b69cc76fcb98131280ee05a99" placeholder="Paste improved summary from Krisp here...">Key Points:
+* Cat&#x27;s transparency around financial records and net profit sheets has helped Sarah feel grounded when making compensation decisions.
+* Sarah noted growing confidence in candidate selection, describing an instinct for identifying strong candidates after a single interview plus portfolio review — contrasting with multi-round processes friends experience elsewhere.
+* Talent Is Fine is working well for managing candidate overflow; Sarah flagged discomfort with the &quot;not a fit&quot; filter, feeling it acts as a permanent black mark on interviewed candidates.
+* Jason reframed &quot;not a fit&quot; as a high bar rather than a permanent rejection — candidates can re-engage later by demonstrating growth.
+* A French-speaking candidate with limited prototyping experience was noted as a strong potential fit for future Montreal work, placed on the backbench with detailed notes.
+* Improving data quality in candidate records was discussed — star ratings plus rich comments on strengths and context are key to making the talent database more useful over time.
+* Sarah has been using Obsidian for interview notes, though interview notes have accidentally spread across three notebooks, reducing the effectiveness of the per-project notebook system.
+* Jason confirmed Sarah is not suffering in silence — she has been leaning on Cat, Ryan, Matt, and Mike for support, gut-checking, and strategy around recruiting decisions.</textarea>
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d020b69cc76fcb98131280ee05a99', 'Sarah / Jason — Recruiting & Talent', '2026-03-18', 'Sarah Benjamin, Jason Schklar', this)">🔶 Publish to Copper</button>
+    <span class="mtg-copy-toast" id="mtg-toast-019d020b69cc76fcb98131280ee05a99" style="display:none; font-size:11px; color:#22c55e;">✓ Copied! Paste in Cowork and say "publish to Copper"</span>
+  </div>
+</div>
     </div>
   </div>
 
@@ -423,7 +500,33 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
       </ul>
       <div class="mtg-cta-bar">
         <a class="cta-btn" href="https://app.krisp.ai/t/019d01ff975b77798990d0cf6a7eca27" target="_blank">🎙 Krisp</a>
-      </div>
+      
+<!-- Krisp publish controls -->
+<div class="mtg-publish-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; padding-top:6px; border-top:1px dashed #f0f0f3;">
+  <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d01ff975b77798990d0cf6a7eca27', 'Sarah / Jason — Team Dynamics (Mike)', '2026-03-18', 'Jason Schklar, Sarah Benjamin', this)" title="Copy note for Copper CRM">🔶 Publish to Copper</button>
+  <button class="cta-btn" onclick="toggleMtgEdit('019d01ff975b77798990d0cf6a7eca27', this)" title="Edit summary before publishing">✏️ Edit Summary</button>
+</div>
+<div class="mtg-edit-panel" id="mtg-edit-019d01ff975b77798990d0cf6a7eca27" style="display:none; margin-top:8px;">
+  <div style="font-size:11px; color:#888; margin-bottom:5px;">Go to Krisp, assign speakers &amp; get your improved summary, then paste it below:</div>
+  <textarea class="mtg-edit-area" id="mtg-text-019d01ff975b77798990d0cf6a7eca27" placeholder="Paste improved summary from Krisp here...">Key Points:
+* Mike is feeling &quot;attacked&quot; by recent feedback, partly attributed to his sensitivity, but also to a communication style mismatch with Sarah.
+* Sarah was unaware of any tension with Mike, noting he wasn&#x27;t even assigned to the projects in question, which highlighted a disconnect in surfacing interpersonal issues.
+* Prototyping checklist context: Sarah was tasked with creating a checklist and chose to work with Mike on it since he was booked full time, expecting a collaborative response rather than defensiveness.
+* Jason acknowledged Mike&#x27;s oversensitivity in this instance, framing the core issue as a communication style mismatch rather than fault on Sarah&#x27;s part.
+* Perception concern raised: some of Sarah&#x27;s feedback reads as questioning Mike&#x27;s value on unbilled internal projects, even if that wasn&#x27;t the intent.
+* Contrast noted between Sarah&#x27;s visible support of Aaron versus a perceived lack of the same engagement with Mike, flagged as a perception issue requiring clarification.
+* Sarah confirmed full support for Mike&#x27;s internal project work, describing it as a key business pillar, and offered to back off or adjust her approach if directed.
+* Jason framed the overarching issue as an interpersonal alignment problem among the four core team members, not a performance or strategy failure.
+
+Action Items:
+* Sarah to reach out to Mike directly to discuss their communication dynamic and address any concerns around the prototyping checklist project.**
+* Sarah to talk to Aaron to ensure Mike is kept in the loop on the Riot project.**
+* Jason to look at Sarah&#x27;s calendar and schedule a follow-up meeting for the next day.**</textarea>
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d01ff975b77798990d0cf6a7eca27', 'Sarah / Jason — Team Dynamics (Mike)', '2026-03-18', 'Jason Schklar, Sarah Benjamin', this)">🔶 Publish to Copper</button>
+    <span class="mtg-copy-toast" id="mtg-toast-019d01ff975b77798990d0cf6a7eca27" style="display:none; font-size:11px; color:#22c55e;">✓ Copied! Paste in Cowork and say "publish to Copper"</span>
+  </div>
+</div>
     </div>
   </div>
 
@@ -458,7 +561,37 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
       </ul>
       <div class="mtg-cta-bar">
         <a class="cta-btn" href="https://app.krisp.ai/t/019d0237186271aa9fd87db7f52d1897" target="_blank">🎙 Krisp</a>
-      </div>
+      
+<!-- Krisp publish controls -->
+<div class="mtg-publish-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; padding-top:6px; border-top:1px dashed #f0f0f3;">
+  <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d0237186271aa9fd87db7f52d1897', 'Dave / Jason — Org Strategy & Leadership', '2026-03-18', 'Jason Schklar, Dave Inscore', this)" title="Copy note for Copper CRM">🔶 Publish to Copper</button>
+  <button class="cta-btn" onclick="toggleMtgEdit('019d0237186271aa9fd87db7f52d1897', this)" title="Edit summary before publishing">✏️ Edit Summary</button>
+</div>
+<div class="mtg-edit-panel" id="mtg-edit-019d0237186271aa9fd87db7f52d1897" style="display:none; margin-top:8px;">
+  <div style="font-size:11px; color:#888; margin-bottom:5px;">Go to Krisp, assign speakers &amp; get your improved summary, then paste it below:</div>
+  <textarea class="mtg-edit-area" id="mtg-text-019d0237186271aa9fd87db7f52d1897" placeholder="Paste improved summary from Krisp here...">Key Points:
+* Kat is seen as causing friction—asking when the website will be &quot;done,&quot; not grasping that it&#x27;s an ongoing effort, and this disconnect is viewed as a worsening trend.
+* Kat appeared surprised by feedback, believing she was executing exactly what was asked of her as a producer, which highlights a gap between her understanding and leadership&#x27;s expectations.
+* Concern raised that Kat may be expressing distrust of Mike&#x27;s output to Ashley, potentially spreading negativity; Dave acknowledged his negative headspace this week may be amplifying his perception.
+* Mike&#x27;s work lacks visibility—neither Dave nor others can clearly answer what he&#x27;s working on, and the AI Foundry and prototyping efforts are not being communicated broadly enough.
+* Separate conversations identified as needed: Dave with Pat, Mike with Kat, and a joint Dave-Jason conversation with Mike, partly to improve Mike&#x27;s internal visibility and communication cadence.
+* Ashley&#x27;s blog post concept is taking shape around her experience running bizdev meetings solo—including the dynamic of a male founder stepping back—and Dave plans to interview her and run it through NotebookLM.
+* Aaron is creating a shadow leadership Slack channel without informing Cat or key stakeholders, and with only about 12 days left in Q1, his managed exit is still unresolved and is blocking the Ryan and Matt situations.
+* Ryan and Matt are both seen as having reached their ceiling—Ryan as self-directed to the point of ignoring instructions, Matt as lacking vision and raising trust concerns—but neither is being fired immediately.
+
+Action Items:
+* Jason to talk to Ashley to understand her perspective on Mike and her expectations.** - _Jason Schklar_
+* Speaker_2 to set up a chat with Jason and Mike to discuss visibility and communication of Mike&#x27;s work.**
+* Jason to talk to Mike about sharing tech and prototyping updates more widely with the team.** - _Jason Schklar_
+* Jason to schedule and have a fuller chat with Pat.** - _Jason Schklar_
+* Speaker_2 to interview Ashley for the blog post, exploring themes of running meetings solo and gender dynamics.**
+* Speaker_2 to talk to Cat about Aaron&#x27;s undisclosed leadership Slack channel and Aaron&#x27;s lack of communication.**
+* Speaker_2 to talk to Cat about expectations for a producer&#x27;s visibility and activity on Slack.**</textarea>
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d0237186271aa9fd87db7f52d1897', 'Dave / Jason — Org Strategy & Leadership', '2026-03-18', 'Jason Schklar, Dave Inscore', this)">🔶 Publish to Copper</button>
+    <span class="mtg-copy-toast" id="mtg-toast-019d0237186271aa9fd87db7f52d1897" style="display:none; font-size:11px; color:#22c55e;">✓ Copied! Paste in Cowork and say "publish to Copper"</span>
+  </div>
+</div>
     </div>
   </div>
 
@@ -496,7 +629,38 @@ body { background:#f4f4f5; font-family:-apple-system,BlinkMacSystemFont,"Segoe U
       </ul>
       <div class="mtg-cta-bar">
         <a class="cta-btn" href="https://app.krisp.ai/t/019d025422767320a670fdc3c27a74fb" target="_blank">🎙 Krisp</a>
-      </div>
+      
+<!-- Krisp publish controls -->
+<div class="mtg-publish-row" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; padding-top:6px; border-top:1px dashed #f0f0f3;">
+  <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d025422767320a670fdc3c27a74fb', 'Staffing is Fine — Weekly Project Review', '2026-03-18', 'Cat Chapman Smith, Jason Schklar, Dave Inscore, Ryan Wolper, Mike McMahon, Aaron Stavely, Matt Laverty, Sarah Benjamin, Ashley Conley, Jerome Tieh, Harrison Fay', this)" title="Copy note for Copper CRM">🔶 Publish to Copper</button>
+  <button class="cta-btn" onclick="toggleMtgEdit('019d025422767320a670fdc3c27a74fb', this)" title="Edit summary before publishing">✏️ Edit Summary</button>
+</div>
+<div class="mtg-edit-panel" id="mtg-edit-019d025422767320a670fdc3c27a74fb" style="display:none; margin-top:8px;">
+  <div style="font-size:11px; color:#888; margin-bottom:5px;">Go to Krisp, assign speakers &amp; get your improved summary, then paste it below:</div>
+  <textarea class="mtg-edit-area" id="mtg-text-019d025422767320a670fdc3c27a74fb" placeholder="Paste improved summary from Krisp here...">Key Points:
+* Sparkle rated B due to a minor client miscommunication; upcoming icon work may be out of scope, and Jerome will proactively reach out about available bandwidth if the client needs additional support.
+* Jason noted that account management should be reaching out to key and former clients about upcoming availability — a broader outreach strategy beyond project-specific follow-ups.
+* Riot Project C and League Live both tracking well; League Live&#x27;s pending extension is confirmed as a separate and above engagement, not a continuation of the current feature work.
+* Pokemon downgraded to C after client pushed back on over-scoping; the directive is to deliver exactly what&#x27;s briefed, idle when milestones are hit, and not go beyond the approved scope.
+* Jason flagged the political sensitivity at Pokemon — outperforming internal pods risks cultural friction, so staying within scope is both a client preference and a strategic necessity.
+* Ryan flagged as having insufficient work on Pokemon; proposal raised to remove Ryan and potentially reduce Annie to sole designer, with a League opportunity possibly absorbing Annie&#x27;s time in April.
+* Mission 42 rated A: Pod 3 confirmed with Corey Dangle and Sarah Belote, Teddy accepted an offer for Pod 4 starting May post-graduation, and Pod 4 start delayed to May 1 at the client&#x27;s request.
+* Mike&#x27;s implementation role on Mission 42 is on hold pending the client&#x27;s architecture decisions; suggestion made to stay engaged informally via Slack to maintain visibility and readiness.
+
+Action Items:
+* Jerome to message the KDS/Sparkle client on the side to let them know available hands exist for additional icon work and to connect with Ashley on budget if needed.** - _Jerome Tieh_
+* Ashley to follow up on the Pokemon contract extension SOW update and gauge where things stand.** - _Ashley Conley_
+* Ryan to convert the GDC deck into a Figma slides version for Ashley to share.** - _Ryan Wolper_
+* Mike to follow up with Brian this week, before Brian leaves on 03/21/2026, to discuss implementation architecture and getting set up in their Slack.** - _Mike McMahon_
+* Sarah to confirm with Corey and Sarah Belote about starting two days earlier on Mission 42 to cover the gap left by Andrea&#x27;s departure.** - _Sarah Benjamin_
+* Aaron to ask Andy during their call whether the two reserved days have been used.** - _Aaron Stavely_
+* Cat to follow up directly with team members who did not receive their t-shirt and swag package.** - _Cat Chapman Smith_
+* Aaron to follow up with Duncan later that day about the Windfall timeline concerns.** - _Aaron Stavely_</textarea>
+  <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+    <button class="cta-btn mtg-pub-btn" onclick="copyMtgNote('019d025422767320a670fdc3c27a74fb', 'Staffing is Fine — Weekly Project Review', '2026-03-18', 'Cat Chapman Smith, Jason Schklar, Dave Inscore, Ryan Wolper, Mike McMahon, Aaron Stavely, Matt Laverty, Sarah Benjamin, Ashley Conley, Jerome Tieh, Harrison Fay', this)">🔶 Publish to Copper</button>
+    <span class="mtg-copy-toast" id="mtg-toast-019d025422767320a670fdc3c27a74fb" style="display:none; font-size:11px; color:#22c55e;">✓ Copied! Paste in Cowork and say "publish to Copper"</span>
+  </div>
+</div>
     </div>
   </div>
 
@@ -1281,6 +1445,27 @@ function saveFocusTopics() {
     });
   });
 })();
+
+function toggleMtgEdit(id, btn) {
+  var panel = document.getElementById('mtg-edit-' + id);
+  if (!panel) return;
+  var isOpen = panel.style.display !== 'none';
+  panel.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '\u270f\ufe0f Edit Summary' : '\u2715 Close Edit';
+}
+function copyMtgNote(id, title, date, participants, btn) {
+  var el = document.getElementById('mtg-text-' + id);
+  var text = el ? el.value.trim() : '';
+  var payload = ['KRISP-TO-COPPER','Title: ' + title,'Date: ' + date,'Participants: ' + participants,'','Summary:',text].join('\n');
+  navigator.clipboard.writeText(payload).then(function() {
+    var toast = document.getElementById('mtg-toast-' + id);
+    if (toast) { toast.style.display = 'inline'; setTimeout(function() { toast.style.display = 'none'; }, 4000); }
+    var orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.style.background = '#22c55e'; btn.style.borderColor = '#22c55e';
+    setTimeout(function() { btn.textContent = orig; btn.style.background = ''; btn.style.borderColor = ''; }, 2500);
+  });
+}
 </script>
 
 <!-- INLINE EDIT FRAMEWORK -->
