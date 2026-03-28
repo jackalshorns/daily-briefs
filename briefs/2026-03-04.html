@@ -1624,12 +1624,14 @@ function showToast(msg) {
 
 
 function navDate(dir) {
-  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
+  var m = window.location.pathname.match(/(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return;
-  const d = new Date(m[1] + 'T12:00:00');
+  var d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
   d.setDate(d.getDate() + dir);
-  const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
-  window.location.href = 'https://jackalshorns.github.io/daily-briefs/briefs/' + s + '.html';
+  var y = d.getFullYear();
+  var mo = String(d.getMonth() + 1).padStart(2, '0');
+  var da = String(d.getDate()).padStart(2, '0');
+  window.location.href = 'https://jackalshorns.github.io/daily-briefs/briefs/' + y + '-' + mo + '-' + da + '.html';
 }
 
 // Disable next-day button if this brief is today or future
