@@ -988,10 +988,10 @@ function toggleMtg(hdr) {
 }
 
 function navDate(dir) {
-  const currentDate = new Date(DATES.brief);
+  const currentDate = new Date(DATES.brief + 'T12:00:00');
   currentDate.setDate(currentDate.getDate() + dir);
-  const newDate = currentDate.toISOString().split('T')[0];
-  window.location.href = `/Claude/Outputs/morning-brief-${newDate}.html`;
+  const newDate = currentDate.toISOString().slice(0, 10);
+  window.location.href = 'https://jackalshorns.github.io/daily-briefs/briefs/' + newDate + '.html';
 }
 
 function setLookback(days, btn) {
