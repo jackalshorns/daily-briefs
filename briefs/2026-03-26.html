@@ -683,8 +683,11 @@ function toggleAttn(hdr) {
   card.classList.toggle('collapsed');
 }
 
-function navDate(days) {
-  console.log('Navigate ' + days + ' days');
+function navDate(dir) {
+  const currentDate = new Date(DATES.brief + 'T12:00:00');
+  currentDate.setDate(currentDate.getDate() + dir);
+  const newDate = currentDate.toISOString().slice(0, 10);
+  window.location.href = 'https://jackalshorns.github.io/daily-briefs/briefs/' + newDate + '.html';
 }
 
 function setLookback(days, btn) {
