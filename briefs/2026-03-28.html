@@ -1089,12 +1089,10 @@ function setLookback(days, btn) {
 }
 
 function navDate(dir) {
-  const m = window.location.pathname.match(/(\d{4}-\d{2}-\d{2})/);
-  if (!m) return;
-  const d = new Date(m[1] + 'T12:00:00');
-  d.setDate(d.getDate() + dir);
-  const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
-  window.location.href = window.location.pathname.replace(/\d{4}-\d{2}-\d{2}/, s);
+  const currentDate = new Date(DATES.brief + 'T12:00:00');
+  currentDate.setDate(currentDate.getDate() + dir);
+  const newDate = currentDate.toISOString().slice(0, 10);
+  window.location.href = 'https://jackalshorns.github.io/daily-briefs/briefs/' + newDate + '.html';
 }
 
 (function() {
