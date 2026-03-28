@@ -933,7 +933,7 @@ function navDate(dir) {
   const d = new Date(m[1] + 'T12:00:00');
   d.setDate(d.getDate() + dir);
   const s = [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-');
-  window.location.href = window.location.pathname.replace(/\d{4}-\d{2}-\d{2}/, s);
+  window.location.href = 'https://jackalshorns.github.io/daily-briefs/briefs/' + s + '.html';
 }
 
 (function() {
