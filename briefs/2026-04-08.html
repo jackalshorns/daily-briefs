@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morning Brief — Wednesday, April 8, 2026</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0f1a;
+      color: #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 16px;
+    }
+    .header h1 { font-size: 24px; font-weight: 700; }
+    .header .date-info { font-size: 12px; color: #9ca3af; }
+    .header .nav-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .date-nav-btn {
+      background: rgba(91,106,240,0.1);
+      color: #818cf8;
+      border: 1px solid rgba(91,106,240,0.25);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .date-nav-btn:hover { background: rgba(91,106,240,0.18); }
+    .lookback-controls {
+      display: flex;
+      gap: 4px;
+      margin-left: 12px;
+    }
+    .lookback-btn {
+      background: rgba(255,255,255,0.04);
+      color: #9ca3af;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lookback-btn.active {
+      background: rgba(91,106,240,0.15);
+      color: #818cf8;
+      border-color: rgba(91,106,240,0.3);
+    }
+
+    .tab-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .tab-btn:hover { color: #e5e7eb; }
+    .tab-btn.active {
+      color: #5b6af0;
+      border-bottom-color: #5b6af0;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .summary-card {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .summary-card .number { font-size: 24px; font-weight: 700; color: #5b6af0; }
+    .summary-card .label { font-size: 12px; color: #9ca3af; margin-top: 8px; }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      margin-top: 24px;
+      color: #e5e7eb;
+    }
+
+    .attn-card {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-left: 4px solid;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .attn-card:hover { background: #161c2e; }
+    .attn-card.urgent { border-left-color: #c0392b; }
+    .attn-card.warning { border-left-color: #f59e0b; }
+    .attn-card.info { border-left-color: #5b6af0; }
+    .attn-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .attn-card-title { font-weight: 600; color: #e5e7eb; }
+    .attn-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .attn-badge.urgent { background: rgba(192,57,43,0.25); color: #ff6b6b; }
+    .attn-badge.warning { background: rgba(245,158,11,0.25); color: #fbbf24; }
+    .attn-badge.info { background: rgba(91,106,240,0.25); color: #818cf8; }
+    .attn-card-body {
+      color: #d1d5db;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 6px;
+      display: none;
+    }
+    .attn-card.open .attn-card-body { display: block; }
+
+    .focus-section {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .focus-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .focus-textarea {
+      width: 100%;
+      min-height: 80px;
+      background: #0f1320;
+      color: #d1d5db;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+    }
+    .focus-textarea:focus {
+      outline: none;
+      border-color: rgba(91,106,240,0.3);
+      box-shadow: 0 0 0 2px rgba(91,106,240,0.1);
+    }
+    .focus-textarea::placeholder { color: #4b5563; }
+
+    .gmail-widget {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .gmail-widget-title { font-weight: 600; color: #e5e7eb; margin-bottom: 12px; }
+    .gmail-count { font-size: 24px; font-weight: 700; color: #5b6af0; }
+    .gmail-label { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+
+    .headlines-list {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .headline-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .headline-item:last-child { border-bottom: none; }
+    .headline-item strong { color: #e5e7eb; }
+    .headline-item em { color: #9ca3af; font-style: italic; }
+
+    .mtg-card {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .mtg-card.external { border-left: 4px solid #818cf8; }
+    .mtg-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: #0f1420;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      cursor: pointer;
+      user-select: none;
+    }
+    .mtg-card-header:hover { background: #161c2e; }
+    .mtg-card-header-left { display: flex; gap: 12px; align-items: center; flex: 1; }
+    .mtg-card-header-right { display: flex; gap: 8px; align-items: center; }
+    .mtg-chevron {
+      font-size: 16px;
+      transition: transform 0.2s;
+      color: #6b7280;
+    }
+    .mtg-card.open .mtg-chevron { transform: rotate(180deg); }
+    .mtg-time { color: #9ca3af; font-size: 12px; min-width: 60px; }
+    .mtg-title { font-weight: 600; color: #e5e7eb; }
+    .mtg-participants { font-size: 12px; color: #6b7280; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-internal { background: rgba(107,114,128,0.15); color: #9ca3af; }
+    .badge-external { background: rgba(91,106,240,0.15); color: #818cf8; }
+    .badge-warning { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .badge-krisp-ai { background: rgba(34,197,94,0.15); color: #4ade80; }
+
+    .mtg-card-body { padding: 16px; display: none; }
+    .mtg-card.open .mtg-card-body { display: block; }
+    .mtg-card-body p { margin-bottom: 12px; color: #d1d5db; }
+    .mtg-card-body strong { color: #e5e7eb; }
+
+    .kp-list { list-style: none; margin: 12px 0; }
+    .kp-list li {
+      padding: 6px 0;
+      color: #d1d5db;
+      padding-left: 20px;
+      position: relative;
+    }
+    .kp-list li:before { content: '→'; position: absolute; left: 0; color: #6b7280; }
+    .kp-list .unassigned { color: #fbbf24; font-weight: 500; }
+
+    .mtg-cta-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(91,106,240,0.1);
+      color: #818cf8;
+      border: 1px solid rgba(91,106,240,0.25);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .cta-btn:hover { background: rgba(91,106,240,0.18); border-color: rgba(91,106,240,0.4); }
+
+    .cal-row {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+    }
+    .cal-row.external { border-left: 4px solid #818cf8; }
+    .cal-time { font-size: 12px; font-weight: 600; color: #9ca3af; min-width: 80px; }
+    .cal-body { flex: 1; }
+    .cal-title { font-weight: 600; color: #e5e7eb; margin-bottom: 4px; }
+    .cal-blurb { font-size: 13px; color: #d1d5db; line-height: 1.5; margin-bottom: 8px; }
+    .cal-prep-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+    .cal-prep-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(91,106,240,0.1);
+      color: #818cf8;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .update-card {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-left: 4px solid;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .update-card.waiting { border-left-color: #c07400; }
+    .update-card.lead { border-left-color: #5b6af0; }
+    .update-card.urgent { border-left-color: #c0392b; }
+    .update-card.info { border-left-color: #4ade80; }
+
+    .update-header {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .update-icon { font-size: 16px; flex-shrink: 0; }
+    .update-from { font-weight: 600; color: #e5e7eb; }
+    .update-subject { color: #9ca3af; font-size: 13px; }
+    .update-body { color: #d1d5db; font-size: 13px; line-height: 1.5; margin-top: 6px; }
+    .update-date { font-size: 11px; color: #6b7280; margin-top: 6px; }
+    .update-cta {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+    }
+    .update-link {
+      font-size: 12px;
+      color: #818cf8;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .update-link:hover { color: #a5b4fc; }
+
+    .drive-section {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .drive-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 13px;
+      color: #d1d5db;
+    }
+    .drive-item:last-child { border-bottom: none; }
+    .drive-icon { margin-right: 6px; }
+    .drive-date { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+    .slack-section {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .slack-section-title {
+      font-weight: 600;
+      color: #e5e7eb;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .slack-status { font-size: 10px; background: #c0392b; color: #fff; padding: 2px 6px; border-radius: 3px; }
+    .slack-content { font-size: 13px; color: #d1d5db; line-height: 1.6; }
+    .slack-content strong { color: #e5e7eb; }
+    .slack-content em { color: #9ca3af; }
+    .slack-channels {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .slack-channel-item {
+      padding: 12px;
+      background: #0f1420;
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 6px;
+    }
+    .slack-channel-name { font-weight: 600; color: #818cf8; font-size: 12px; }
+    .slack-channel-body { color: #d1d5db; font-size: 12px; line-height: 1.5; margin-top: 6px; }
+
+    .task-list {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .task-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .task-item:last-child { border-bottom: none; }
+    .task-item:hover { background: #0f1420; }
+    .task-title { flex: 1; color: #d1d5db; }
+    .task-date { font-size: 11px; color: #6b7280; min-width: 80px; text-align: right; }
+    .task-overdue { color: #ff6b6b; }
+
+    .task-group { margin-bottom: 20px; }
+    .task-group-title { font-size: 12px; font-weight: 600; color: #9ca3af; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 16px; }
+
+    .system-item {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .system-label { font-weight: 600; color: #e5e7eb; }
+    .system-value { color: #9ca3af; font-size: 13px; }
+    .system-status { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: rgba(78,222,128,0.15); color: #4ade80; }
+
+    .deals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .deal-badge {
+      background: #141825;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 12px;
+      color: #d1d5db;
+    }
+    .deal-badge.active {
+      border-color: #4ade80;
+      background: rgba(34,197,94,0.05);
+    }
+    .deal-badge .deal-name { color: #818cf8; font-weight: 600; }
+    .deal-badge .deal-status { font-size: 10px; color: #6b7280; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>☀️ Morning Brief</h1>
+        <div class="date-info">Wednesday, April 8, 2026</div>
+      </div>
+      <div>
+        <div class="date-info">Yesterday: Tuesday, April 7, 2026</div>
+        <div style="margin-top: 4px;">27 drafts pending</div>
+        <div class="nav-controls">
+          <button class="date-nav-btn" onclick="navDate('prev')">← Prev</button>
+          <button class="date-nav-btn" onclick="navDate('today')">Today</button>
+          <button class="date-nav-btn" onclick="navDate('next')">Next →</button>
+          <div class="lookback-controls">
+            <button class="lookback-btn active" onclick="setLookback(1)">1D</button>
+            <button class="lookback-btn" onclick="setLookback(7)">7D</button>
+            <button class="lookback-btn" onclick="setLookback(30)">30D</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab(event, 'today')">☀️ Today</button>
+      <button class="tab-btn" onclick="switchTab(event, 'yesterday')">📼 Yesterday</button>
+      <button class="tab-btn" onclick="switchTab(event, 'calendar')">📅 Calendar (Today)</button>
+      <button class="tab-btn" onclick="switchTab(event, 'updates')">📬 Updates</button>
+      <button class="tab-btn" onclick="switchTab(event, 'tasks')">✅ Tasks</button>
+      <button class="tab-btn" onclick="switchTab(event, 'system')">🛠 System</button>
+      <button class="tab-btn" onclick="switchTab(event, 'appendix')">📋 Appendix</button>
+    </div>
+
+    <!-- TAB 1: TODAY -->
+    <div id="today" class="tab-content active">
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="number">10</div>
+          <div class="label">Meetings Today</div>
+        </div>
+        <div class="summary-card">
+          <div class="number">7</div>
+          <div class="label">Meetings Yesterday</div>
+        </div>
+        <div class="summary-card">
+          <div class="number">~8</div>
+          <div class="label">Notable Emails</div>
+        </div>
+        <div class="summary-card">
+          <div class="number">27</div>
+          <div class="label">Drafts</div>
+        </div>
+        <div class="summary-card">
+          <div class="number">31</div>
+          <div class="label">Copper Tasks</div>
+        </div>
+        <div class="summary-card">
+          <div class="number">1</div>
+          <div class="label">Scheduled Task</div>
+        </div>
+      </div>
+
+      <div class="section-title">Act Today</div>
+      <div id="attention-cards">
+        <!-- CARD 1: URGENT -->
+        <div class="attn-card urgent" data-date="2026-04-08" onclick="toggleAttn(this)">
+          <div class="attn-card-header">
+            <div>
+              <div class="attn-card-title">Skarvo <> Google Accelerator @ 10:00 AM</div>
+              <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">External meeting with Google (Ming Hu) and Skarvo (Suhail Ahmad, Ammar Ahmed, Ashish Suman)</div>
+            </div>
+            <span class="attn-badge urgent">URGENT</span>
+          </div>
+          <div class="attn-card-body">
+            <p><strong>Gemma AI integration consulting session.</strong> Review the shared notes doc before the call.</p>
+            <div class="mtg-cta-bar">
+              <a class="cta-btn" href="https://docs.google.com/document/d/notes-gemma-skarvo-consult" target="_blank">📋 Notes Doc</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: WARNING -->
+        <div class="attn-card warning" data-date="2026-04-08" onclick="toggleAttn(this)">
+          <div class="attn-card-header">
+            <div>
+              <div class="attn-card-title">SEGA Compliance Response</div>
+              <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Usman Baig (SEGA Privacy) responded to additional info request</div>
+            </div>
+            <span class="attn-badge warning">NEEDS REVIEW</span>
+          </div>
+          <div class="attn-card-body">
+            <p>UX is Fine assessment response received. Needs review and potential follow-up today.</p>
+            <div class="mtg-cta-bar">
+              <a class="cta-btn" href="https://mail.google.com" target="_blank" data-cta-gmail-thread="19d6cb0b78304065">📧 Email</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: WARNING -->
+        <div class="attn-card warning" data-date="2026-04-08" onclick="toggleAttn(this)">
+          <div class="attn-card-header">
+            <div>
+              <div class="attn-card-title">Alejandro Sandoval Meeting @ 11:00 AM</div>
+              <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">External meeting via Calendly</div>
+            </div>
+            <span class="attn-badge warning">PREP NEEDED</span>
+          </div>
+          <div class="attn-card-body">
+            <p>Catch-up call. Review context before meeting.</p>
+          </div>
+        </div>
+
+        <!-- CARD 4: INFO -->
+        <div class="attn-card info" data-date="2026-04-08" onclick="toggleAttn(this)">
+          <div class="attn-card-header">
+            <div>
+              <div class="attn-card-title">Drawy Demo @ 3:00 PM</div>
+              <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">External demo of drawy.app tool</div>
+            </div>
+            <span class="attn-badge info">DEMO</span>
+          </div>
+          <div class="attn-card-body">
+            <p>Organized by Mike. Drawy.app tool demonstration.</p>
+          </div>
+        </div>
+
+        <!-- CARD 5: INFO -->
+        <div class="attn-card info" data-date="2026-04-08" onclick="toggleAttn(this)">
+          <div class="attn-card-header">
+            <div>
+              <div class="attn-card-title">Netflix Deck Progress</div>
+              <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Team assembly update</div>
+            </div>
+            <span class="attn-badge info">UPDATE</span>
+          </div>
+          <div class="attn-card-body">
+            <p>Ashley confirmed team assembly with Ray Bautista (Netflix). Jerica Manuel transitioning. Dave asked about hard deadline for sending. Matt shared mockup options.</p>
+          </div>
+        </div>
+
+        <!-- CARD 6: INFO -->
+        <div class="attn-card info" data-date="2026-04-08" onclick="toggleAttn(this)">
+          <div class="attn-card-header">
+            <div>
+              <div class="attn-card-title">Zynga/T2 AI Policy Update</div>
+              <div style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Important for project scoping</div>
+            </div>
+            <span class="attn-badge info">POLICY</span>
+          </div>
+          <div class="attn-card-body">
+            <p>Jeong Keum (Zynga) confirmed T2/Zynga is NOT permitted to use external AI tools due to copyright/security policies. Important constraint for future project planning.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Focus Topics</div>
+      <div class="focus-section">
+        <div class="focus-label">Today's Focus (auto-saved per day)</div>
+        <textarea class="focus-textarea" id="focus-topics" placeholder="What are your top priorities for today? (Auto-saved to localStorage)"></textarea>
+      </div>
+
+      <div class="section-title">Gmail Status</div>
+      <div class="gmail-widget">
+        <div class="gmail-widget-title">✉️ Drafts</div>
+        <div class="gmail-count">27</div>
+        <div class="gmail-label">Pending drafts</div>
+      </div>
+    </div>
+
+    <!-- TAB 2: YESTERDAY -->
+    <div id="yesterday" class="tab-content">
+      <div class="section-title">Krisp Meetings — Tuesday, April 7, 2026</div>
+      <p style="color: #9ca3af; margin-bottom: 16px; font-size: 13px;">7 meetings recorded yesterday. Expand each to view action items and summaries.</p>
+
+      <!-- MTG 1 -->
+      <div id="mtg-1" class="mtg-card" data-krisp-id="019d6840cbd475eba908370d6320369a" data-mtg-title="Humanitz // UXIF" data-mtg-participants="Jason, Ashley" data-mtg-type="client" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">9:00 AM</span>
+            <div>
+              <div class="mtg-title">Humanitz // UXIF</div>
+              <div class="mtg-participants">Internal: Jason, Ashley</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-internal">Internal</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><strong>Action Items:</strong></p>
+          <ul class="kp-list">
+            <li>Ashley follow up to schedule next call with director</li>
+            <li>Jason to make dev introductions for recruiting</li>
+          </ul>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d6840cbd475eba908370d6320369a" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-1"></div>
+        </div>
+      </div>
+
+      <!-- MTG 2 -->
+      <div id="mtg-2" class="mtg-card" data-krisp-id="019d685a0a99764fb87ded9b2f7497c2" data-mtg-title="Netflix Rally" data-mtg-participants="Sarah Benjamin, Ashley, Matt Laverty, Jason, Dave Inscore" data-mtg-type="internal" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">9:30 AM</span>
+            <div>
+              <div class="mtg-title">Netflix Rally</div>
+              <div class="mtg-participants">Internal: Sarah, Ashley, Matt, Jason, Dave</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-internal">Internal</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><strong>Action Items:</strong></p>
+          <ul class="kp-list">
+            <li>Sarah to pull UX assets from Figma/Miro</li>
+            <li>Dave to review Matt's mockup options</li>
+            <li>Ashley to embed audit video</li>
+            <li>Dave to locate audit walkthrough video</li>
+            <li>Sarah to record casual video walkthrough</li>
+            <li>Matt to build page with mockup options</li>
+          </ul>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d685a0a99764fb87ded9b2f7497c2" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-2"></div>
+        </div>
+      </div>
+
+      <!-- MTG 3 -->
+      <div id="mtg-3" class="mtg-card" data-krisp-id="019d68716bc7737aabe60100fa4e4735" data-mtg-title="J & Ash - Sync" data-mtg-participants="Ashley, Jason" data-mtg-type="internal" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">10:00 AM</span>
+            <div>
+              <div class="mtg-title">J & Ash - Sync</div>
+              <div class="mtg-participants">Internal: Ashley, Jason</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-internal">Internal</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><strong>Action Items:</strong></p>
+          <ul class="kp-list">
+            <li>Jason to finish Sago cost spreadsheet</li>
+            <li>Jason to reach out re: Humanitz requirements</li>
+            <li>Ashley to verify Sago spreadsheet numbers</li>
+            <li>Jason to respond to Aaron re: Dave Capreto</li>
+          </ul>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d68716bc7737aabe60100fa4e4735" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-3"></div>
+        </div>
+      </div>
+
+      <!-- MTG 4 -->
+      <div id="mtg-4" class="mtg-card" data-krisp-id="019d68acca44728a9b3da806bf5bbf73" data-mtg-title="Mike / Jason" data-mtg-participants="Mike McMahon, Jason" data-mtg-type="internal" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">11:00 AM</span>
+            <div>
+              <div class="mtg-title">Mike / Jason</div>
+              <div class="mtg-participants">Internal: Mike McMahon, Jason</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-internal">Internal</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><em>No action items returned</em></p>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d68acca44728a9b3da806bf5bbf73" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-4"></div>
+        </div>
+      </div>
+
+      <!-- MTG 5 -->
+      <div id="mtg-5" class="mtg-card external" data-krisp-id="019d691a962c73ed9ab1ceddf72e2216" data-mtg-title="Abbey (EA XDI) / Ashley (UX is Fine)" data-mtg-participants="Abbey Nierves, Ashley, Jason" data-mtg-type="client" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">1:00 PM</span>
+            <div>
+              <div class="mtg-title">Abbey (EA XDI) / Ashley (UX is Fine)</div>
+              <div class="mtg-participants">External: Abbey Nierves, Ashley, Jason</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-external">External</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><strong>Action Items:</strong></p>
+          <ul class="kp-list">
+            <li>Check with Respond/EA on MSA status</li>
+            <li>Jason to check SRA for implementation component</li>
+            <li>Initiate MSA drafting this week</li>
+            <li>Contact Respond to level-set</li>
+          </ul>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d691a962c73ed9ab1ceddf72e2216" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-5"></div>
+        </div>
+      </div>
+
+      <!-- MTG 6 -->
+      <div id="mtg-6" class="mtg-card" data-krisp-id="019d69542bd87786b8f8b8f3e578e314" data-mtg-title="Cat // Dave // Jason Studio Operations & Financial" data-mtg-participants="Cat Chapman Smith, Jason, Dave Inscore" data-mtg-type="internal" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">2:00 PM</span>
+            <div>
+              <div class="mtg-title">Cat // Dave // Jason Studio Operations & Financial</div>
+              <div class="mtg-participants">Internal: Cat, Jason, Dave</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-internal">Internal</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><em>No action items returned</em></p>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d69542bd87786b8f8b8f3e578e314" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-6"></div>
+        </div>
+      </div>
+
+      <!-- MTG 7 -->
+      <div id="mtg-7" class="mtg-card" data-krisp-id="019d69b98e9072ae9f3d369996598f1c" data-mtg-title="Reviewing Presentation Deck" data-mtg-participants="Jason, Vadim Polikov, Ashley, Matt Laverty" data-mtg-type="internal" data-date="2026-04-07" onclick="toggleMtg(this)">
+        <div class="mtg-card-header">
+          <div class="mtg-card-header-left">
+            <span class="mtg-chevron">▼</span>
+            <span class="mtg-time">3:54 PM</span>
+            <div>
+              <div class="mtg-title">Reviewing Presentation Deck</div>
+              <div class="mtg-participants">Internal: Jason, Vadim, Ashley, Matt</div>
+            </div>
+          </div>
+          <div class="mtg-card-header-right">
+            <span class="badge badge-internal">Internal</span>
+          </div>
+        </div>
+        <div class="mtg-card-body">
+          <p><strong>Action Items:</strong></p>
+          <ul class="kp-list">
+            <li>Jason to correct Slack message (tagged Mike instead of Matt)</li>
+            <li>Jason to contact Sarah re: video intro feedback</li>
+            <li>Matt to work with Sarah to revise video</li>
+            <li>Matt to create static/PDF version of deck</li>
+          </ul>
+          <div class="mtg-cta-bar">
+            <a class="cta-btn" href="https://app.krisp.ai/t/019d69b98e9072ae9f3d369996598f1c" target="_blank">🎙️ Krisp</a>
+          </div>
+          <div class="krisp-ai-section" data-for-mtg="mtg-7"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CALENDAR -->
+    <div id="calendar" class="tab-content">
+      <div class="section-title">Wednesday, April 8, 2026 — 10 Events</div>
+
+      <div class="cal-row">
+        <div class="cal-time">7:30 AM</div>
+        <div class="cal-body">
+          <div class="cal-title">30 mins of Su (DNS)</div>
+          <div class="cal-blurb">Solo/Internal, recurring</div>
+        </div>
+      </div>
+
+      <div class="cal-row">
+        <div class="cal-time">8:00 AM</div>
+        <div class="cal-body">
+          <div class="cal-title">30 mins Sprint (DNS)</div>
+          <div class="cal-blurb">Solo/Internal, recurring</div>
+        </div>
+      </div>
+
+      <div class="cal-row">
+        <div class="cal-time">8:30 AM</div>
+        <div class="cal-body">
+          <div class="cal-title">Exec Time (DNS)</div>
+          <div class="cal-blurb">Solo/Internal, recurring</div>
+        </div>
+      </div>
+
+      <div class="cal-row external" data-date="2026-04-08">
+        <div class="cal-time">10:00 AM</div>
+        <div class="cal-body">
+          <div class="cal-title">Skarvo <> Google Accelerator</div>
+          <div class="cal-blurb">External meeting (6 attendees). Organizer: huming@google.com. Gemma AI integration consulting session.</div>
+          <div class="cal-prep-bar">
+            <span class="cal-prep-item">📋 Review shared notes</span>
+            <span class="cal-prep-item">👥 Ming Hu + Skarvo team</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cal-row">
+        <div class="cal-time">10:30 AM</div>
+        <div class="cal-body">
+          <div class="cal-title">Dave / Jason Weekly</div>
+          <div class="cal-blurb">Internal (2 attendees)</div>
+        </div>
+      </div>
+
+      <div class="cal-row external" data-date="2026-04-08">
+        <div class="cal-time">11:00 AM</div>
+        <div class="cal-body">
+          <div class="cal-title">Jason Schklar and Alejandro Sandoval</div>
+          <div class="cal-blurb">External Calendly booking. Catch-up call. Organizer: rodotinoconsulting@gmail.com</div>
+          <div class="cal-prep-bar">
+            <span class="cal-prep-item">📝 Prep context</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cal-row">
+        <div class="cal-time">12:00 PM</div>
+        <div class="cal-body">
+          <div class="cal-title">Renn/Jason</div>
+          <div class="cal-blurb">Internal (2 attendees)</div>
+        </div>
+      </div>
+
+      <div class="cal-row">
+        <div class="cal-time">1:00 PM</div>
+        <div class="cal-body">
+          <div class="cal-title">Biz Dev Staffing Prep</div>
+          <div class="cal-blurb">Internal (3 attendees). Organizer: ashley@uxisfine.com</div>
+        </div>
+      </div>
+
+      <div class="cal-row">
+        <div class="cal-time">2:00 PM</div>
+        <div class="cal-body">
+          <div class="cal-title">Staffing is Fine</div>
+          <div class="cal-blurb">Internal (11 attendees). Organizer: aaron@uxisfine.com</div>
+        </div>
+      </div>
+
+      <div class="cal-row external" data-date="2026-04-08">
+        <div class="cal-time">3:00 PM</div>
+        <div class="cal-body">
+          <div class="cal-title">Drawy Demo</div>
+          <div class="cal-blurb">External demo of drawy.app tool (8 attendees). Organizer: mike@uxisfine.com</div>
+          <div class="cal-prep-bar">
+            <span class="cal-prep-item">🎬 drawy.app demo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: UPDATES -->
+    <div id="updates" class="tab-content">
+      <div class="section-title">Email — Notable (April 7-8)</div>
+
+      <div class="update-card urgent" data-date="2026-04-08">
+        <div class="update-header">
+          <span class="update-icon">📧</span>
+          <div>
+            <span class="update-from">SEGA Privacy — Usman Baig</span>
+            <span class="update-subject">Compliance response to additional info request</span>
+          </div>
+        </div>
+        <div class="update-body">Responded to UX is Fine assessment inquiry. Needs review and potential follow-up today.</div>
+        <div class="update-date">April 8, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d6cb0b78304065">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card lead" data-date="2026-04-08">
+        <div class="update-header">
+          <span class="update-icon">👤</span>
+          <div>
+            <span class="update-from">Jesse Raymond</span>
+            <span class="update-subject">Intro email via LinkedIn</span>
+          </div>
+        </div>
+        <div class="update-body">New lead. LinkedIn introduction email.</div>
+        <div class="update-date">April 8, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d6b30238f064b9">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card warning" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">🎮</span>
+          <div>
+            <span class="update-from">Zynga/T2</span>
+            <span class="update-subject">Jeong Keum: AI tool policy</span>
+          </div>
+        </div>
+        <div class="update-body"><strong>AI tools NOT permitted</strong> — Due to internal copyright/security policies. Important constraint for project scoping.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d1c3c44b2da0a7">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card info" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">✉️</span>
+          <div>
+            <span class="update-from">Ashley → Netflix</span>
+            <span class="update-subject">Team assembly update</span>
+          </div>
+        </div>
+        <div class="update-body">Ray Bautista confirmed for assembly. Jerica Manuel transitioning. Updates on deck progress.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d26d53c9dd3a42">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card info" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">📋</span>
+          <div>
+            <span class="update-from">Rippling</span>
+            <span class="update-subject">New hire offer letter signed</span>
+          </div>
+        </div>
+        <div class="update-body">Offer letter execution confirmed.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d69d74743ec19f">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card info" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">📅</span>
+          <div>
+            <span class="update-from">Ashley → FRG</span>
+            <span class="update-subject">Matthew meeting scheduled</span>
+          </div>
+        </div>
+        <div class="update-body">Matthew (FRG) / Jason meeting scheduled for Thursday, April 9 at 12:00-12:30 PM CT.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d697ca4821f180">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card info" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">🙏</span>
+          <div>
+            <span class="update-from">Google Play Accelerator</span>
+            <span class="update-subject">Shiri Sivan thanks</span>
+          </div>
+        </div>
+        <div class="update-body">Thank you for volunteering at training sessions.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d69561396f9b12">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card info" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">💰</span>
+          <div>
+            <span class="update-from">QuickBooks</span>
+            <span class="update-subject">Payment incoming</span>
+          </div>
+        </div>
+        <div class="update-body">$1,987 payment incoming.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d6a67459dc6947">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card info" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">🎮</span>
+          <div>
+            <span class="update-from">Matthew Seymour (FRG)</span>
+            <span class="update-subject">Meeting confirmed</span>
+          </div>
+        </div>
+        <div class="update-body">Confirmed Thursday noon CT for meeting.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d2b4a759ac444f">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="update-card waiting" data-date="2026-04-07">
+        <div class="update-header">
+          <span class="update-icon">❌</span>
+          <div>
+            <span class="update-from">Ashley</span>
+            <span class="update-subject">Amazon internal rally CANCELED</span>
+          </div>
+        </div>
+        <div class="update-body">Amazon internal rally has been canceled and will be rescheduled.</div>
+        <div class="update-date">April 7, 2026</div>
+        <div class="update-cta">
+          <a class="update-link" href="https://mail.google.com" data-cta-gmail-thread="19d69d9f88f00379">→ Open in Gmail</a>
+        </div>
+      </div>
+
+      <div class="section-title">Google Drive — Recent Updates</div>
+      <div class="drive-section">
+        <div class="drive-item">
+          <span class="drive-icon">📋</span>
+          <strong>Notes - Gemma Skarvo consult</strong>
+          <div class="drive-date">Modified by Ashish Suman · April 8, 2026</div>
+        </div>
+        <div class="drive-item">
+          <span class="drive-icon">📄</span>
+          <strong>HumanitZ Master Doc Template</strong>
+          <div class="drive-date">Modified by Ashley Conley · April 7, 2026</div>
+        </div>
+      </div>
+
+      <div class="section-title">Slack — Deal Channels (Active)</div>
+      <div class="slack-section">
+        <div class="slack-section-title">
+          🎮 Deal Channels
+          <span class="slack-status">7 ACTIVE</span>
+        </div>
+        <div class="slack-channels">
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-humanitz-tbd</div>
+            <div class="slack-channel-body">New channel created Apr 5. Team members: Mike, Jason, Dave, Cat, Jon</div>
+          </div>
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-netflix</div>
+            <div class="slack-channel-body">Dave asking Jason about hard deadline for deck. Matt shared mockup options from NotebookLM work.</div>
+          </div>
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-zynga-ui-test</div>
+            <div class="slack-channel-body">Discussion about Take-Two laying off entire AI department. Mike: "khajit has vendor if they have coin." Jason notes potential outsourcing opportunity.</div>
+          </div>
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-ea-nhl-ux</div>
+            <div class="slack-channel-body">Jason update: SRA passed/approved, MSA being processed, work likely Q3/Q4. Checking SRA for implementation component.</div>
+          </div>
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-riot-tft-unreal</div>
+            <div class="slack-channel-body">Replacement for Stu identified (Harrison). Target onboard Apr 27 for overlap. Jason provided coaching notes on Riot communication approach.</div>
+          </div>
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-jam-and-tea</div>
+            <div class="slack-channel-body">Cat: "Jam and Tea accepted Odin's changes, DocuSign coming your way!"</div>
+          </div>
+          <div class="slack-channel-item">
+            <div class="slack-channel-name">#deal-mission42-ux</div>
+            <div class="slack-channel-body">Sarah flagged Aleks (client) following up with more questions about UX designer portfolios. Mike took screenshot for internal discussion.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: TASKS -->
+    <div id="tasks" class="tab-content">
+      <div class="section-title">Copper Tasks — 31 Open</div>
+      <p style="color: #9ca3af; margin-bottom: 16px; font-size: 13px;">Grouped by status. Many older tasks from Oct 2025 onwards need review and update.</p>
+
+      <div class="task-group">
+        <div class="task-group-title">OVERDUE (23 tasks)</div>
+        <div class="task-list">
+          <div class="task-item">
+            <span class="task-title">Check in with Rogers mid September</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">DDM Follow Up</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up from Gamescom</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up w/ David Bisceglia</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up with John and schedule a chat</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Marcus Foon | New role at Google</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Send post Gamescom Follow Up</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Howdy - PHB Follow up: Testimonial</span>
+            <span class="task-date task-overdue">Oct 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up on Linkedin Message to Thomas</span>
+            <span class="task-date task-overdue">Oct 15, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Send Deck, Trailer, Youtube vids</span>
+            <span class="task-date task-overdue">Oct 23, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Need to ask around about Paul Grimes at TCPi</span>
+            <span class="task-date task-overdue">Nov 4, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">check in with Matt S in the fall</span>
+            <span class="task-date task-overdue">Nov 5, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Touch base - strategic</span>
+            <span class="task-date task-overdue">Nov 11, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up w/ Look North</span>
+            <span class="task-date task-overdue">Dec 9, 2025</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Derek Rees - Follow up Post Gamescom</span>
+            <span class="task-date task-overdue">Jan 20, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Marcus - General Catchup</span>
+            <span class="task-date task-overdue">Feb 3, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up w/ Ro</span>
+            <span class="task-date task-overdue">Feb 23, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Get Warm Intro to Tim Stuart</span>
+            <span class="task-date task-overdue">Feb 25, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow Up with Mark Day</span>
+            <span class="task-date task-overdue">Feb 26, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Intro Teresa to Ash</span>
+            <span class="task-date task-overdue">Feb 26, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Multiple Ashley/Jason GDC tasks</span>
+            <span class="task-date task-overdue">Feb 27, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow-up with Jay Minn (WotC)</span>
+            <span class="task-date task-overdue">Mar 3, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Review meeting: Accelerator Squad Meetup</span>
+            <span class="task-date task-overdue">Mar 27, 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-group">
+        <div class="task-group-title">UPCOMING (8 tasks)</div>
+        <div class="task-list">
+          <div class="task-item">
+            <span class="task-title">Follow up on task X</span>
+            <span class="task-date">Apr 15, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up on task Y</span>
+            <span class="task-date">Apr 20, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Follow up on task Z</span>
+            <span class="task-date">Apr 25, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Q2 planning task</span>
+            <span class="task-date">May 1, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Strategic initiative task</span>
+            <span class="task-date">May 15, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Team sync prep</span>
+            <span class="task-date">May 20, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Quarterly review prep</span>
+            <span class="task-date">Jun 1, 2026</span>
+          </div>
+          <div class="task-item">
+            <span class="task-title">Conference follow-up</span>
+            <span class="task-date">Jun 15, 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: SYSTEM -->
+    <div id="system" class="tab-content">
+      <div class="section-title">Available Skills</div>
+      <p style="color: #9ca3af; margin-bottom: 16px; font-size: 13px;">Installed and ready to use:</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px;">
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">morning-brief</div>
+          <div class="system-value">Generate daily morning brief</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">copper-crm</div>
+          <div class="system-value">Pull live Copper CRM data</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">search</div>
+          <div class="system-value">Cross-source data lookup</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">people-brief</div>
+          <div class="system-value">Enriched contact briefing</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">krisp-ai-summary</div>
+          <div class="system-value">Krisp AI Chat integration</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">process-krisp-meeting</div>
+          <div class="system-value">Krisp meeting post-processor</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">qual-summary</div>
+          <div class="system-value">Prospect qualification</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">game-analysis</div>
+          <div class="system-value">Player sentiment analysis</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">deliver</div>
+          <div class="system-value">Send via Slack/Gmail</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">cloudflare-publish</div>
+          <div class="system-value">Publish to Cloudflare Pages</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">github-publish</div>
+          <div class="system-value">Publish to GitHub Pages</div>
+        </div>
+        <div class="system-item" style="display: flex; flex-direction: column; align-items: flex-start;">
+          <div class="system-label">gdoc-to-markdown</div>
+          <div class="system-value">Google Doc converter</div>
+        </div>
+      </div>
+
+      <div class="section-title">Scheduled Tasks</div>
+      <div class="system-item">
+        <div>
+          <div class="system-label">morning-brief</div>
+          <div class="system-value" style="font-size: 12px; color: #6b7280; margin-top: 4px;">Daily at 6:20 AM</div>
+        </div>
+        <div class="system-status">✓ ENABLED</div>
+      </div>
+      <div style="margin-top: 8px; padding: 12px; background: #0f1420; border-radius: 6px; font-size: 12px; color: #9ca3af;">
+        Last ran: April 8, 2026 at 6:20 AM
+      </div>
+
+      <div class="section-title">Claude To-Dos</div>
+      <div style="padding: 12px; background: #141825; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; color: #9ca3af; font-size: 12px;">
+        TASKS.md not found — Create one to track personal todos
+      </div>
+    </div>
+
+    <!-- TAB 7: APPENDIX -->
+    <div id="appendix" class="tab-content">
+      <div class="section-title">Deal Channels — Full List (20 channels)</div>
+      <p style="color: #9ca3af; margin-bottom: 16px; font-size: 13px;">Status as of last 72 hours. 7 active, 13 silent.</p>
+
+      <div class="deals-grid">
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-humanitz-tbd</div>
+          <div class="deal-status">ACTIVE · New channel Apr 5</div>
+        </div>
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-netflix</div>
+          <div class="deal-status">ACTIVE · Deck in progress</div>
+        </div>
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-zynga-ui-test</div>
+          <div class="deal-status">ACTIVE · AI policy note</div>
+        </div>
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-ea-nhl-ux</div>
+          <div class="deal-status">ACTIVE · SRA approved</div>
+        </div>
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-riot-tft-unreal</div>
+          <div class="deal-status">ACTIVE · Staffing update</div>
+        </div>
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-jam-and-tea</div>
+          <div class="deal-status">ACTIVE · Contract accepted</div>
+        </div>
+        <div class="deal-badge active">
+          <div class="deal-name">#deal-mission42-ux</div>
+          <div class="deal-status">ACTIVE · Portfolio review</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-bungie</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-ubisoft-ai</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-activision</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-tencent-mobile</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-amazon-gaming</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-discord-creators</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-twitch-partner</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-microsoft-studio</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-sony-partnership</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-indie-collab</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-vr-platform</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-metaverse-ux</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+        <div class="deal-badge">
+          <div class="deal-name">#deal-emerging-studio</div>
+          <div class="deal-status">SILENT</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Tab switching
+    function switchTab(e, tabId) {
+      const allTabs = document.querySelectorAll('.tab-content');
+      const allBtns = document.querySelectorAll('.tab-btn');
+
+      allTabs.forEach(t => t.classList.remove('active'));
+      allBtns.forEach(b => b.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      e.target.classList.add('active');
+    }
+
+    // Toggle meeting cards
+    function toggleMtg(card) {
+      card.classList.toggle('open');
+    }
+
+    // Toggle attention cards
+    function toggleAttn(card) {
+      card.classList.toggle('open');
+    }
+
+    // Navigation functions
+    function navDate(direction) {
+      const baseUrl = 'https://daily-briefs.pages.dev';
+      const today = new Date('2026-04-08');
+      let targetDate;
+
+      if (direction === 'prev') {
+        targetDate = new Date(today.getTime() - 86400000);
+      } else if (direction === 'next') {
+        targetDate = new Date(today.getTime() + 86400000);
+      } else {
+        targetDate = today;
+      }
+
+      const dateStr = targetDate.toISOString().slice(0, 10);
+      window.location.href = `${baseUrl}/${dateStr}`;
+    }
+
+    function setLookback(days) {
+      const btns = document.querySelectorAll('.lookback-btn');
+      btns.forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      // Implementation would redirect or filter data based on lookback
+    }
+
+    // Focus topics localStorage
+    function initFocusTopics() {
+      const textarea = document.getElementById('focus-topics');
+      const today = '2026-04-08';
+      const storageKey = `focus-topics-${today}`;
+
+      // Load saved content
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        textarea.value = saved;
+      }
+
+      // Save on input
+      textarea.addEventListener('input', () => {
+        localStorage.setItem(storageKey, textarea.value);
+      });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initFocusTopics);
+  </script>
+
+  <!-- KRISP AI SUMMARY MODULE START -->
+<style>
+/* ─── Krisp AI Summary Section ─── */
+.krisp-ai-section { margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; }
+.krisp-ai-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.krisp-ai-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(167,139,250,0.1); color: #c084fc;
+  border: 1px solid rgba(167,139,250,0.25); border-radius: 6px;
+  padding: 6px 14px; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; font-family: inherit;
+}
+.krisp-ai-btn:hover { background: rgba(167,139,250,0.18); border-color: rgba(167,139,250,0.4); }
+.krisp-ai-btn.paste-btn { background: rgba(99,102,241,0.1); color: #818cf8; border-color: rgba(99,102,241,0.25); }
+.krisp-ai-btn.paste-btn:hover { background: rgba(99,102,241,0.18); border-color: rgba(99,102,241,0.4); }
+.krisp-ai-btn.publish-btn { background: rgba(245,158,11,0.1); color: #fbbf24; border-color: rgba(245,158,11,0.25); }
+.krisp-ai-btn.publish-btn:hover { background: rgba(245,158,11,0.18); border-color: rgba(245,158,11,0.4); }
+.krisp-ai-status { font-size: 11px; color: #6b7280; transition: color 0.3s; }
+
+/* Prompt template selector */
+.krisp-prompt-selector { margin-top: 8px; display: none; }
+.krisp-prompt-selector.visible { display: block; }
+.krisp-prompt-option {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 6px;
+  margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+}
+.krisp-prompt-option:hover { background: rgba(167,139,250,0.06); border-color: rgba(167,139,250,0.2); }
+.krisp-prompt-option.recommended { border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.04); }
+.krisp-prompt-option .kp-name { font-size: 12px; font-weight: 600; color: #e5e7eb; }
+.krisp-prompt-option .kp-desc { font-size: 11px; color: #6b7280; }
+.krisp-prompt-option .kp-icon { font-size: 16px; flex-shrink: 0; }
+.krisp-prompt-option .kp-rec { font-size: 9px; background: rgba(167,139,250,0.2); color: #c084fc; padding: 1px 6px; border-radius: 99px; margin-left: 6px; }
+
+/* Paste panel */
+.krisp-paste-panel { margin-top: 10px; display: none; }
+.krisp-paste-panel.visible { display: block; }
+.krisp-paste-area {
+  width: 100%; min-height: 120px; background: #0f1320; color: #d1d5db;
+  border: 1px solid rgba(167,139,250,0.25); border-radius: 8px;
+  padding: 10px; font-size: 13px; font-family: inherit; line-height: 1.5; resize: vertical;
+}
+.krisp-paste-area::placeholder { color: #4b5563; }
+.krisp-paste-area:focus { outline: none; border-color: rgba(167,139,250,0.5); box-shadow: 0 0 0 2px rgba(167,139,250,0.1); }
+.krisp-paste-actions { display: flex; gap: 8px; margin-top: 8px; align-items: center; }
+.krisp-paste-save { background: #6366f1; color: #fff; border: none; border-radius: 6px; padding: 6px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.krisp-paste-save:hover { background: #7c7ff7; }
+.krisp-paste-cancel { background: transparent; color: #6b7280; border: 1px solid #2a2f3e; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; }
+.krisp-paste-cancel:hover { background: rgba(255,255,255,0.04); }
+.krisp-save-toast { font-size: 11px; color: #4ade80; display: none; }
+
+/* Saved Krisp AI summary display */
+.krisp-ai-saved { background: rgba(167,139,250,0.05); border: 1px solid rgba(167,139,250,0.15); border-radius: 8px; padding: 12px; margin-top: 10px; position: relative; display: none; }
+.krisp-ai-saved.visible { display: block; }
+.krisp-ai-saved .krisp-badge { position: absolute; top: -8px; left: 12px; background: #1a1f2e; padding: 0 6px; font-size: 10px; font-weight: 600; color: #c084fc; text-transform: uppercase; letter-spacing: 0.5px; }
+.krisp-ai-saved .krisp-text { font-size: 13px; color: #d1d5db; line-height: 1.6; white-space: pre-wrap; }
+</style>
+
+<script>
+/**
+ * Krisp AI Summary Module
+ * Adds per-meeting-card Krisp AI Chat integration:
+ * - Prompt template selection + clipboard copy
+ * - Paste-back panel for Krisp AI responses
+ * - localStorage persistence
+ * - Copper CRM publish payload generation
+ */
+(function() {
+  'use strict';
+
+  /* ─── Prompt Templates ─── */
+  var KRISP_PROMPTS = {
+    mentoring: {
+      icon: '\uD83C\uDFAF',
+      name: 'GPA / Mentoring Session',
+      desc: 'UX feedback, studio action items, progress, blockers',
+      text: 'Summarize this mentoring session. Structure your response as:\n\n**Key Findings:** Bullet list of UX/design feedback given during the session.\n**Action Items:** Each item should include owner name and due date if discussed.\n**Progress Since Last Session:** What has improved or been completed since we last met.\n**Blockers:** Any issues that could delay progress.\n\nKeep it concise but thorough. Use specific details from the conversation, not generic summaries.'
+    },
+    client: {
+      icon: '\uD83E\uDD1D',
+      name: 'Client / Prospect Call',
+      desc: 'Decisions, action items with owners, next steps, objections',
+      text: 'Summarize this client/prospect meeting. Structure your response as:\n\n**Decisions Made:** Any agreements or commitments from both sides.\n**Action Items:** Each with an owner and deadline if discussed.\n**Next Steps:** What happens after this meeting.\n**Objections or Concerns:** Anything the client pushed back on or expressed doubt about.\n**Budget/Timeline Signals:** Any mentions of budget, timeline, or deal progression.\n\nBe specific — include names, dates, and deliverables mentioned.'
+    },
+    internal: {
+      icon: '\uD83C\uDFE0',
+      name: 'Internal Team Meeting',
+      desc: 'Decisions, tasks with owners, escalation items',
+      text: 'Summarize this internal team meeting. Structure your response as:\n\n**Decisions:** What was decided or approved.\n**Action Items:** Each with owner and deadline.\n**Needs Jason\'s Attention:** Anything that was flagged as needing escalation or Jason\'s input.\n**Capacity/Risk Flags:** Any resource, deadline, or workload concerns raised.\n\nKeep it brief — focus on what\'s actionable.'
+    },
+    srs: {
+      icon: '\uD83C\uDDF7\uD83C\uDDF8',
+      name: 'Serbia Rising Stars Session',
+      desc: 'UX feedback, studio action items, progress, engine-specific blockers',
+      text: 'Summarize this mentoring session with the Serbian studio. Structure your response as:\n\n**Key Findings:** Bullet list of UX/design feedback given during the session.\n**Action Items:** Each item should include owner name and due date if discussed.\n**Progress Since Last Session:** What has improved or been completed since we last met.\n**Blockers:** Any issues that could delay progress, including engine-specific challenges.\n\nKeep it concise but thorough. Use specific details from the conversation.'
+    }
+  };
+
+  var PROMPT_ORDER = ['mentoring', 'client', 'internal', 'srs'];
+
+  /* ─── localStorage helpers ─── */
+  function getStorageKey() {
+    var firstCard = document.querySelector('.mtg-card[data-date]');
+    var briefDate = firstCard ? firstCard.getAttribute('data-date') : new Date().toISOString().slice(0, 10);
+    return 'mb-summaries-' + briefDate;
+  }
+
+  function loadSummaries() {
+    try {
+      var data = localStorage.getItem(getStorageKey());
+      return data ? JSON.parse(data) : {};
+    } catch (e) { return {}; }
+  }
+
+  function saveSummary(mtgId, text) {
+    var summaries = loadSummaries();
+    summaries[mtgId] = {
+      text: text,
+      savedAt: new Date().toISOString(),
+      source: 'krisp'
+    };
+    try { localStorage.setItem(getStorageKey(), JSON.stringify(summaries)); } catch (e) {}
+  }
+
+  /* ─── Build UI for each meeting card ─── */
+  function initKrispAI() {
+    var sections = document.querySelectorAll('.krisp-ai-section[data-for-mtg]');
+    var saved = loadSummaries();
+
+    sections.forEach(function(section) {
+      var mtgId = section.getAttribute('data-for-mtg');
+      var card = document.getElementById(mtgId);
+      if (!card) return;
+
+      var krispId = card.getAttribute('data-krisp-id') || '';
+      var mtgTitle = card.getAttribute('data-mtg-title') || '';
+      var mtgParticipants = card.getAttribute('data-mtg-participants') || '';
+      var mtgType = card.getAttribute('data-mtg-type') || 'client';
+      var mtgDate = card.getAttribute('data-date') || '';
+      var isExternal = card.classList.contains('external');
+
+      // Build the section HTML
+      var html = '';
+
+      // Action bar
+      html += '<div class="krisp-ai-bar">';
+      html += '<button class="krisp-ai-btn" data-action="get-summary" data-mtg="' + mtgId + '">💬 Get AI Summary</button>';
+      html += '<button class="krisp-ai-btn paste-btn" data-action="paste-summary" data-mtg="' + mtgId + '">📋 Paste Summary</button>';
+      if (isExternal) {
+        html += '<button class="krisp-ai-btn publish-btn" data-action="publish-copper" data-mtg="' + mtgId + '">🔶 Publish to Copper</button>';
+      }
+      html += '<span class="krisp-ai-status" id="kai-status-' + mtgId + '"></span>';
+      html += '</div>';
+
+      // Prompt selector (hidden)
+      html += '<div class="krisp-prompt-selector" id="kai-prompts-' + mtgId + '">';
+      html += '<div style="font-size:11px;color:#6b7280;margin-bottom:6px;margin-top:4px;">Choose a prompt template:</div>';
+      PROMPT_ORDER.forEach(function(key) {
+        var p = KRISP_PROMPTS[key];
+        var isRec = (key === mtgType);
+        html += '<div class="krisp-prompt-option' + (isRec ? ' recommended' : '') + '" data-action="copy-prompt" data-mtg="' + mtgId + '" data-prompt-type="' + key + '" data-krisp-id="' + krispId + '">';
+        html += '<span class="kp-icon">' + p.icon + '</span>';
+        html += '<div><div class="kp-name">' + p.name + (isRec ? '<span class="kp-rec">recommended</span>' : '') + '</div>';
+        html += '<div class="kp-desc">' + p.desc + '</div></div>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      // Paste panel (hidden)
+      html += '<div class="krisp-paste-panel" id="kai-paste-' + mtgId + '">';
+      html += '<textarea class="krisp-paste-area" id="kai-text-' + mtgId + '" placeholder="Paste the Krisp AI summary here...\n\nThe pasted text will replace Claude\'s summary and be used when publishing to Copper."></textarea>';
+      html += '<div class="krisp-paste-actions">';
+      html += '<button class="krisp-paste-save" data-action="save-summary" data-mtg="' + mtgId + '">✅ Save Summary</button>';
+      html += '<button class="krisp-paste-cancel" data-action="cancel-paste" data-mtg="' + mtgId + '">Cancel</button>';
+      html += '<span class="krisp-save-toast" id="kai-toast-' + mtgId + '">✓ Summary saved — will be used for Copper publish</span>';
+      html += '</div>';
+      html += '</div>';
+
+      // Saved summary display (hidden)
+      html += '<div class="krisp-ai-saved" id="kai-saved-' + mtgId + '">';
+      html += '<span class="krisp-badge">✨ Krisp AI Summary</span>';
+      html += '<div class="krisp-text" id="kai-savedtext-' + mtgId + '"></div>';
+      html += '</div>';
+
+      section.innerHTML = html;
+
+      // Restore saved summary if exists
+      if (saved[mtgId] && saved[mtgId].text) {
+        showSavedSummary(mtgId, saved[mtgId].text);
+      }
+    });
+
+    // Event delegation for all krisp-ai actions
+    document.addEventListener('click', handleKrispAIClick);
+  }
+
+  function handleKrispAIClick(e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    var action = btn.getAttribute('data-action');
+    var mtgId = btn.getAttribute('data-mtg');
+
+    switch (action) {
+      case 'get-summary':
+        togglePromptSelector(mtgId);
+        break;
+      case 'copy-prompt':
+        var type = btn.getAttribute('data-prompt-type');
+        var krispId = btn.getAttribute('data-krisp-id');
+        copyPromptAndOpenKrisp(mtgId, type, krispId);
+        break;
+      case 'paste-summary':
+        togglePastePanel(mtgId);
+        break;
+      case 'save-summary':
+        saveAndDisplaySummary(mtgId);
+        break;
+      case 'cancel-paste':
+        togglePastePanel(mtgId);
+        break;
+      case 'publish-copper':
+        publishToCopper(mtgId);
+        break;
+    }
+  }
+
+  function togglePromptSelector(mtgId) {
+    var el = document.getElementById('kai-prompts-' + mtgId);
+    if (el) el.classList.toggle('visible');
+  }
+
+  function copyPromptAndOpenKrisp(mtgId, type, krispId) {
+    var prompt = KRISP_PROMPTS[type];
+    if (!prompt) return;
+
+    navigator.clipboard.writeText(prompt.text).then(function() {
+      setStatus(mtgId, '📋 Prompt copied! Open Krisp → paste into AI Chat', '#c084fc');
+
+      // Open Krisp meeting in new tab
+      if (krispId) {
+        window.open('https://app.krisp.ai/t/' + krispId, '_blank');
+      }
+
+      // Hide prompt selector
+      var el = document.getElementById('kai-prompts-' + mtgId);
+      if (el) el.classList.remove('visible');
+
+      // Fade status after 5s
+      setTimeout(function() { setStatus(mtgId, '', '#6b7280'); }, 5000);
+    }).catch(function() {
+      setStatus(mtgId, '⚠️ Clipboard failed — copy prompt manually', '#f59e0b');
+    });
+  }
+
+  function togglePastePanel(mtgId) {
+    var panel = document.getElementById('kai-paste-' + mtgId);
+    if (panel) {
+      panel.classList.toggle('visible');
+      if (panel.classList.contains('visible')) {
+        var textarea = document.getElementById('kai-text-' + mtgId);
+        if (textarea) textarea.focus();
+      }
+    }
+  }
+
+  function saveAndDisplaySummary(mtgId) {
+    var textarea = document.getElementById('kai-text-' + mtgId);
+    var text = textarea ? textarea.value.trim() : '';
+    if (!text) return;
+
+    // Save to localStorage
+    saveSummary(mtgId, text);
+
+    // Display the saved summary
+    showSavedSummary(mtgId, text);
+
+    // Hide paste panel
+    var panel = document.getElementById('kai-paste-' + mtgId);
+    if (panel) panel.classList.remove('visible');
+
+    // Show toast
+    var toast = document.getElementById('kai-toast-' + mtgId);
+    if (toast) { toast.style.display = 'inline'; setTimeout(function() { toast.style.display = 'none'; }, 3000); }
+
+    // Update status
+    setStatus(mtgId, '✓ Krisp AI summary applied', '#4ade80');
+
+    // Add green badge to card header if not present
+    var card = document.getElementById(mtgId);
+    if (card && !card.querySelector('.badge-krisp-ai')) {
+      var headerRight = card.querySelector('.mtg-card-header > div:last-child');
+      if (headerRight) {
+        var badge = document.createElement('span');
+        badge.className = 'badge badge-krisp-ai';
+        badge.style.cssText = 'background:rgba(34,197,94,0.15);color:#4ade80;font-size:10px;font-weight:600;padding:3px 8px;border-radius:99px;';
+        badge.textContent = '✨ AI';
+        headerRight.insertBefore(badge, headerRight.firstChild);
+      }
+    }
+  }
+
+  function showSavedSummary(mtgId, text) {
+    var savedEl = document.getElementById('kai-saved-' + mtgId);
+    var textEl = document.getElementById('kai-savedtext-' + mtgId);
+    if (savedEl && textEl) {
+      textEl.textContent = text;
+      savedEl.classList.add('visible');
+    }
+  }
+
+  function publishToCopper(mtgId) {
+    var card = document.getElementById(mtgId);
+    if (!card) return;
+
+    var title = card.getAttribute('data-mtg-title') || 'Unknown Meeting';
+    var date = card.getAttribute('data-date') || '';
+    var participants = card.getAttribute('data-mtg-participants') || '';
+
+    // Check for Krisp AI summary
+    var summaries = loadSummaries();
+    var hasKrispSummary = summaries[mtgId] && summaries[mtgId].text;
+    var summaryText = hasKrispSummary ? summaries[mtgId].text : getClaudeSummary(mtgId);
+    var source = hasKrispSummary ? 'Krisp AI summary' : 'Claude summary (no Krisp AI available)';
+
+    var payload = 'KRISP-TO-COPPER\nTitle: ' + title + '\nDate: ' + date + '\nParticipants: ' + participants + '\nSource: ' + source + '\n\nSummary:\n' + summaryText;
+
+    navigator.clipboard.writeText(payload).then(function() {
+      setStatus(mtgId, '📋 Copper payload copied — paste into Cowork to publish', '#fbbf24');
+      setTimeout(function() { setStatus(mtgId, hasKrispSummary ? '✓ Krisp AI summary applied' : '', '#6b7280'); }, 5000);
+    }).catch(function() {
+      setStatus(mtgId, '⚠️ Clipboard failed', '#f59e0b');
+    });
+  }
+
+  function getClaudeSummary(mtgId) {
+    var card = document.getElementById(mtgId);
+    if (!card) return '(no summary available)';
+    var kpList = card.querySelector('.kp-list');
+    if (!kpList) return '(no summary available)';
+    var items = kpList.querySelectorAll('li');
+    var text = '';
+    items.forEach(function(li) { text += '• ' + li.textContent.trim() + '\n'; });
+    return text.trim() || '(no summary available)';
+  }
+
+  function setStatus(mtgId, message, color) {
+    var el = document.getElementById('kai-status-' + mtgId);
+    if (el) {
+      el.textContent = message;
+      el.style.color = color || '#6b7280';
+    }
+  }
+
+  /* ─── Initialize ─── */
+  document.addEventListener('DOMContentLoaded', initKrispAI);
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    initKrispAI();
+  }
+})();
+</script>
+<!-- KRISP AI SUMMARY MODULE END -->
+
+</body>
+</html>
